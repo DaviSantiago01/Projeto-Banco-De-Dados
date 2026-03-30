@@ -1,0 +1,20 @@
+{
+  "name": "projeto-bd-loja-materiais",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Arquitetura separada para a Entrega 03 do projeto de Banco de Dados 2026.1.",
+  "scripts": {
+    "dev": "dotenv -e .env -- cross-env FRONTEND_ORIGIN=http://localhost:5173,http://127.0.0.1:5173 VITE_API_URL=http://localhost:8080/api concurrently -k -n backend,frontend \".\\apps\\backend\\mvnw.cmd -f .\\apps\\backend\\pom.xml spring-boot:run\" \"npm --prefix apps/frontend run dev -- --host localhost --port 5173\"",
+    "dev:frontend": "npm --prefix apps/frontend run dev",
+    "build:frontend": "npm --prefix apps/frontend run build",
+    "preview:frontend": "npm --prefix apps/frontend run preview",
+    "dev:backend": ".\\apps\\backend\\mvnw.cmd -f .\\apps\\backend\\pom.xml spring-boot:run",
+    "build:backend": ".\\apps\\backend\\mvnw.cmd -q -f .\\apps\\backend\\pom.xml -DskipTests package",
+    "start:backend": "java -jar apps\\backend\\target\\backend-0.0.1-SNAPSHOT.jar"
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1",
+    "cross-env": "^10.1.0",
+    "dotenv-cli": "^11.0.0"
+  }
+}

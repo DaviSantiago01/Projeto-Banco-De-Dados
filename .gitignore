@@ -1,0 +1,12 @@
+node_modules/
+apps/*/node_modules
+apps/*/dist
+apps/backend/.env
+apps/backend/target
+arquivos_auxiliares/
+.local_pgdata/
+logs/
+.runtime/
+PRD.md
+.env
+*.log
