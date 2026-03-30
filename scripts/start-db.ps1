@@ -4,30 +4,34 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+# Descobre qual servico do PostgreSQL deve ser usado.
 function Resolve-PostgresServiceName {
-    param([string]$ExplicitName)
+    param([string]$NomeInformado)
 
-    if ($ExplicitName) {
-        return $ExplicitName
+    if ($NomeInformado) {
+        return $NomeInformado
     }
 
-    $service = Get-Service *postgres* -ErrorAction SilentlyContinue |
-        Sort-Object Name |
-        Select-Object -First 1
+    $servicos = @(Get-Service *postgres* -ErrorAction SilentlyContinue | Sort-Object Name)
 
-    if (-not $service) {
+    if (-not $servicos.Count) {
         throw "Nenhum servico do PostgreSQL foi encontrado. Instale o PostgreSQL ou informe -ServiceName."
     }
 
-    return $service.Name
+    if ($servicos.Count -gt 1) {
+        $nomes = ($servicos | Select-Object -ExpandProperty Name) -join ", "
+        throw "Mais de um servico do PostgreSQL foi encontrado: $nomes. Informe -ServiceName para escolher o servico correto."
+    }
+
+    return $servicos[0].Name
 }
 
-$resolvedServiceName = Resolve-PostgresServiceName -ExplicitName $ServiceName
-$service = Get-Service -Name $resolvedServiceName -ErrorAction Stop
+$nomeServico = Resolve-PostgresServiceName -NomeInformado $ServiceName
+$servico = Get-Service -Name $nomeServico -ErrorAction Stop
 
-if ($service.Status -ne "Running") {
-    Start-Service -Name $resolvedServiceName
-    $service.WaitForStatus("Running", "00:00:15")
+if ($servico.Status -ne "Running") {
+    Start-Service -Name $nomeServico
+    $servico.WaitForStatus("Running", "00:00:15")
 }
 
-Write-Host "PostgreSQL em execucao pelo servico: $resolvedServiceName"
+Write-Host "PostgreSQL em execucao pelo servico: $nomeServico"

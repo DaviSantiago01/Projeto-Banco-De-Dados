@@ -20,7 +20,8 @@ public class ApiExceptionHandler {
             ? exception.getReason()
             : "Nao foi possivel concluir a operacao.";
 
-        return ResponseEntity.status(exception.getStatusCode())
+        return ResponseEntity
+            .status(exception.getStatusCode())
             .body(Map.of("message", mensagem));
     }
 
@@ -36,7 +37,8 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<Map<String, String>> tratarCorpoInvalido(HttpMessageNotReadableException exception) {
-        return ResponseEntity.badRequest()
+        return ResponseEntity
+            .badRequest()
             .body(Map.of("message", "Corpo da requisicao em formato invalido."));
     }
 
@@ -46,27 +48,32 @@ public class ApiExceptionHandler {
         String codigoSql = exception.getSQLState();
 
         if ("23505".equals(codigoSql)) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
+            return ResponseEntity
+                .status(HttpStatus.CONFLICT)
                 .body(Map.of("message", "Registro duplicado. Verifique os campos unicos."));
         }
 
         if ("23503".equals(codigoSql)) {
-            return ResponseEntity.badRequest()
+            return ResponseEntity
+                .badRequest()
                 .body(Map.of("message", "Operacao invalida por causa de integridade referencial."));
         }
 
         if ("22P02".equals(codigoSql)) {
-            return ResponseEntity.badRequest()
+            return ResponseEntity
+                .badRequest()
                 .body(Map.of("message", "Um dos valores informados esta em formato invalido."));
         }
 
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(Map.of("message", "Erro ao acessar o banco de dados."));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> tratarErroGenerico(Exception exception) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity
+            .status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(Map.of("message", "Erro interno do servidor."));
     }
 }

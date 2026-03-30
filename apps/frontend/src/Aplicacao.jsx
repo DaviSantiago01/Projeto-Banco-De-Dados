@@ -51,7 +51,9 @@ function montarFormularioInicialVenda(vendas, clientes = [], atendentes = []) {
     30,
   ) + 1;
   const dataAtual = new Date();
-  const dataHoraLocal = new Date(dataAtual.getTime() - dataAtual.getTimezoneOffset() * 60000)
+  const dataHoraLocal = new Date(
+    dataAtual.getTime() - dataAtual.getTimezoneOffset() * 60000,
+  )
     .toISOString()
     .slice(0, 16);
 
@@ -362,8 +364,8 @@ function Aplicacao() {
             <p className="page-kicker">Loja de Materiais de Construcao</p>
             <h1 className="page-title">Painel da Loja</h1>
             <p className="page-subtitle">
-              Esse sistema serve para gerenciar uma loja de materiais de construcao,
-              com cadastro de produtos, consulta de categorias e controle das vendas
+              Esse sistema serve para gerenciar uma loja de materiais de construcao, com
+              cadastro de produtos, consulta de categorias e controle das vendas
               realizadas no banco de dados.
             </p>
             <div className="page-highlights" aria-label="Resumo geral do sistema">
@@ -421,7 +423,9 @@ function Aplicacao() {
               aoExcluirProduto={removerProduto}
               aoEditarProduto={iniciarEdicaoProduto}
               aoMudarCampoProduto={atualizarCampoProduto}
-              aoMudarBuscaProduto={(evento) => setBuscaProduto(evento.target.value)}
+              aoMudarBuscaProduto={(evento) =>
+                setBuscaProduto(evento.target.value)
+              }
               aoSalvarProduto={salvarProduto}
               aoLimparProduto={limparEdicaoProduto}
             />
@@ -440,7 +444,9 @@ function Aplicacao() {
               aoEditarVenda={iniciarEdicaoVenda}
               aoLimparVenda={limparEdicaoVenda}
               aoMudarCampoVenda={atualizarCampoVenda}
-              aoMudarBuscaVenda={(evento) => setBuscaVenda(evento.target.value)}
+              aoMudarBuscaVenda={(evento) =>
+                setBuscaVenda(evento.target.value)
+              }
               aoSalvarVenda={salvarVenda}
             />
           )}

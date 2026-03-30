@@ -36,23 +36,73 @@ export function SecaoVendas({
         <form className="editor-form" onSubmit={aoSalvarVenda}>
           <div className="editor-form__grid">
             <CampoFormulario htmlFor="venda-numero" rotulo="Numero">
-              <input id="venda-numero" name="numero" className="input" type="number" min="1" inputMode="numeric" value={formularioVenda.numero} onChange={aoMudarCampoVenda} autoComplete="off" required />
+              <input
+                id="venda-numero"
+                name="numero"
+                className="input"
+                type="number"
+                min="1"
+                inputMode="numeric"
+                value={formularioVenda.numero}
+                onChange={aoMudarCampoVenda}
+                autoComplete="off"
+                required
+              />
             </CampoFormulario>
             <CampoFormulario htmlFor="venda-data" rotulo="Data e hora">
-              <input id="venda-data" name="dataHora" className="input" type="datetime-local" value={formularioVenda.dataHora} onChange={aoMudarCampoVenda} required />
+              <input
+                id="venda-data"
+                name="dataHora"
+                className="input"
+                type="datetime-local"
+                value={formularioVenda.dataHora}
+                onChange={aoMudarCampoVenda}
+                required
+              />
             </CampoFormulario>
             <CampoFormulario htmlFor="venda-valor" rotulo="Valor total">
-              <input id="venda-valor" name="valorTotal" className="input" type="number" min="0" step="0.01" inputMode="decimal" value={formularioVenda.valorTotal} onChange={aoMudarCampoVenda} autoComplete="off" required />
+              <input
+                id="venda-valor"
+                name="valorTotal"
+                className="input"
+                type="number"
+                min="0"
+                step="0.01"
+                inputMode="decimal"
+                value={formularioVenda.valorTotal}
+                onChange={aoMudarCampoVenda}
+                autoComplete="off"
+                required
+              />
             </CampoFormulario>
             <CampoFormulario htmlFor="venda-pagamento" rotulo="Pagamento">
-              <select id="venda-pagamento" name="formaPagamento" className="input" value={formularioVenda.formaPagamento} onChange={aoMudarCampoVenda}>
+              <select
+                id="venda-pagamento"
+                name="formaPagamento"
+                className="input"
+                value={formularioVenda.formaPagamento}
+                onChange={aoMudarCampoVenda}
+              >
                 {OPCOES_PAGAMENTO.map((opcao) => (
-                  <option key={opcao} value={opcao}>{opcao.replace('_', ' ')}</option>
+                  <option key={opcao} value={opcao}>
+                    {opcao.replace('_', ' ')}
+                  </option>
                 ))}
               </select>
             </CampoFormulario>
-            <CampoFormulario htmlFor="venda-cliente" rotulo="Cliente / CPF" ajuda="Selecione um cliente cadastrado.">
-              <select id="venda-cliente" name="cpfCliente" className="input" value={formularioVenda.cpfCliente} onChange={aoMudarCampoVenda} required>
+            <CampoFormulario
+              htmlFor="venda-cliente"
+              rotulo="Cliente / CPF"
+              ajuda="Selecione um cliente cadastrado."
+            >
+              <select
+                id="venda-cliente"
+                name="cpfCliente"
+                className="input"
+                value={formularioVenda.cpfCliente}
+                onChange={aoMudarCampoVenda}
+                required
+              >
                 <option value="">Selecione</option>
                 {clientes.map((cliente) => (
                   <option key={cliente.cpf} value={cliente.cpf}>
@@ -61,8 +111,19 @@ export function SecaoVendas({
                 ))}
               </select>
             </CampoFormulario>
-            <CampoFormulario htmlFor="venda-atendente" rotulo="Atendente / Matricula" ajuda="Selecione um atendente cadastrado.">
-              <select id="venda-atendente" name="matAtendente" className="input" value={formularioVenda.matAtendente} onChange={aoMudarCampoVenda} required>
+            <CampoFormulario
+              htmlFor="venda-atendente"
+              rotulo="Atendente / Matricula"
+              ajuda="Selecione um atendente cadastrado."
+            >
+              <select
+                id="venda-atendente"
+                name="matAtendente"
+                className="input"
+                value={formularioVenda.matAtendente}
+                onChange={aoMudarCampoVenda}
+                required
+              >
                 <option value="">Selecione</option>
                 {atendentes.map((atendente) => (
                   <option key={atendente.matricula} value={atendente.matricula}>
@@ -74,7 +135,11 @@ export function SecaoVendas({
           </div>
           <div className="editor-form__actions">
             <button type="submit" className="button button--primary" disabled={salvandoVenda}>
-              {salvandoVenda ? 'Salvando...' : numeroVendaEmEdicao ? 'Atualizar venda' : 'Criar venda'}
+              {salvandoVenda
+                ? 'Salvando...'
+                : numeroVendaEmEdicao
+                  ? 'Atualizar venda'
+                  : 'Criar venda'}
             </button>
             <button type="button" className="button button--secondary" onClick={aoLimparVenda}>
               Limpar
@@ -133,8 +198,22 @@ export function SecaoVendas({
                     <td>{formatarMoeda(venda.valorTotal)}</td>
                     <td>
                       <div className="table-actions">
-                        <button type="button" className="button button--secondary" onClick={() => aoEditarVenda(venda)} aria-label={`Editar venda ${venda.numero}`}>Editar</button>
-                        <button type="button" className="button button--danger" onClick={() => aoExcluirVenda(venda.numero)} aria-label={`Excluir venda ${venda.numero}`}>Excluir</button>
+                        <button
+                          type="button"
+                          className="button button--secondary"
+                          onClick={() => aoEditarVenda(venda)}
+                          aria-label={`Editar venda ${venda.numero}`}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          type="button"
+                          className="button button--danger"
+                          onClick={() => aoExcluirVenda(venda.numero)}
+                          aria-label={`Excluir venda ${venda.numero}`}
+                        >
+                          Excluir
+                        </button>
                       </div>
                     </td>
                   </tr>

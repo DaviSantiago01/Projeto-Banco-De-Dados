@@ -39,7 +39,10 @@ public class ProdutoController {
     }
 
     @PutMapping("/{codigo}")
-    public Produto atualizar(@PathVariable String codigo, @Valid @RequestBody Produto produto) throws SQLException {
+    public Produto atualizar(
+        @PathVariable String codigo,
+        @Valid @RequestBody Produto produto
+    ) throws SQLException {
         // Usa o codigo da URL para evitar divergencia com o corpo enviado pela tela.
         produto.setCodigo(codigo);
         Produto produtoAtualizado = produtoDao.atualizar(codigo, produto);

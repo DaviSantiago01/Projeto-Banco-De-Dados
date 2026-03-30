@@ -50,7 +50,14 @@ public class ProdutoDao {
 
     public Produto inserir(Produto produto) throws SQLException {
         String sql = """
-            INSERT INTO produto (codigo, nome, preco, descricao, unidade_medida, cod_categoria)
+            INSERT INTO produto (
+                codigo,
+                nome,
+                preco,
+                descricao,
+                unidade_medida,
+                cod_categoria
+            )
             VALUES (?, ?, ?, ?, ?, ?)
             """;
 
@@ -68,7 +75,12 @@ public class ProdutoDao {
     public Produto atualizar(String codigo, Produto produto) throws SQLException {
         String sql = """
             UPDATE produto
-            SET nome = ?, preco = ?, descricao = ?, unidade_medida = ?, cod_categoria = ?
+            SET
+                nome = ?,
+                preco = ?,
+                descricao = ?,
+                unidade_medida = ?,
+                cod_categoria = ?
             WHERE codigo = ?
             """;
 

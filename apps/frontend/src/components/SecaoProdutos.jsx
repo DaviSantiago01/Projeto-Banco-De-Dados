@@ -34,37 +34,101 @@ export function SecaoProdutos({
       >
         <form className="editor-form" onSubmit={aoSalvarProduto}>
           <div className="editor-form__grid">
-            <CampoFormulario htmlFor="produto-codigo" rotulo="Codigo" ajuda="Informe um codigo unico.">
-              <input id="produto-codigo" name="codigo" className="input" value={formularioProduto.codigo} onChange={aoMudarCampoProduto} autoComplete="off" required />
+            <CampoFormulario
+              htmlFor="produto-codigo"
+              rotulo="Codigo"
+              ajuda="Informe um codigo unico."
+            >
+              <input
+                id="produto-codigo"
+                name="codigo"
+                className="input"
+                value={formularioProduto.codigo}
+                onChange={aoMudarCampoProduto}
+                autoComplete="off"
+                required
+              />
             </CampoFormulario>
             <CampoFormulario htmlFor="produto-nome" rotulo="Nome">
-              <input id="produto-nome" name="nome" className="input" value={formularioProduto.nome} onChange={aoMudarCampoProduto} autoComplete="off" required />
+              <input
+                id="produto-nome"
+                name="nome"
+                className="input"
+                value={formularioProduto.nome}
+                onChange={aoMudarCampoProduto}
+                autoComplete="off"
+                required
+              />
             </CampoFormulario>
             <CampoFormulario htmlFor="produto-preco" rotulo="Preco">
-              <input id="produto-preco" name="preco" className="input" type="number" step="0.01" min="0" inputMode="decimal" value={formularioProduto.preco} onChange={aoMudarCampoProduto} autoComplete="off" required />
+              <input
+                id="produto-preco"
+                name="preco"
+                className="input"
+                type="number"
+                step="0.01"
+                min="0"
+                inputMode="decimal"
+                value={formularioProduto.preco}
+                onChange={aoMudarCampoProduto}
+                autoComplete="off"
+                required
+              />
             </CampoFormulario>
             <CampoFormulario htmlFor="produto-unidade" rotulo="Unidade">
-              <select id="produto-unidade" name="unidadeMedida" className="input" value={formularioProduto.unidadeMedida} onChange={aoMudarCampoProduto}>
+              <select
+                id="produto-unidade"
+                name="unidadeMedida"
+                className="input"
+                value={formularioProduto.unidadeMedida}
+                onChange={aoMudarCampoProduto}
+              >
                 {OPCOES_UNIDADE.map((opcao) => (
-                  <option key={opcao} value={opcao}>{opcao}</option>
+                  <option key={opcao} value={opcao}>
+                    {opcao}
+                  </option>
                 ))}
               </select>
             </CampoFormulario>
-            <CampoFormulario htmlFor="produto-categoria" rotulo="Categoria" ajuda="Selecione uma categoria cadastrada.">
-              <select id="produto-categoria" name="codCategoria" className="input" value={formularioProduto.codCategoria} onChange={aoMudarCampoProduto} required>
+            <CampoFormulario
+              htmlFor="produto-categoria"
+              rotulo="Categoria"
+              ajuda="Selecione uma categoria cadastrada."
+            >
+              <select
+                id="produto-categoria"
+                name="codCategoria"
+                className="input"
+                value={formularioProduto.codCategoria}
+                onChange={aoMudarCampoProduto}
+                required
+              >
                 <option value="">Selecione</option>
                 {categorias.map((categoria) => (
-                  <option key={categoria.codigo} value={categoria.codigo}>{categoria.nome}</option>
+                  <option key={categoria.codigo} value={categoria.codigo}>
+                    {categoria.nome}
+                  </option>
                 ))}
               </select>
             </CampoFormulario>
             <CampoFormulario htmlFor="produto-descricao" rotulo="Descricao">
-              <textarea id="produto-descricao" name="descricao" className="input input--textarea" value={formularioProduto.descricao} onChange={aoMudarCampoProduto} rows="5" />
+              <textarea
+                id="produto-descricao"
+                name="descricao"
+                className="input input--textarea"
+                value={formularioProduto.descricao}
+                onChange={aoMudarCampoProduto}
+                rows="5"
+              />
             </CampoFormulario>
           </div>
           <div className="editor-form__actions">
             <button type="submit" className="button button--primary" disabled={salvandoProduto}>
-              {salvandoProduto ? 'Salvando...' : codigoProdutoEmEdicao ? 'Atualizar produto' : 'Criar produto'}
+              {salvandoProduto
+                ? 'Salvando...'
+                : codigoProdutoEmEdicao
+                  ? 'Atualizar produto'
+                  : 'Criar produto'}
             </button>
             <button type="button" className="button button--secondary" onClick={aoLimparProduto}>
               Limpar
@@ -115,8 +179,22 @@ export function SecaoProdutos({
                     <td>{produto.unidadeMedida}</td>
                     <td>
                       <div className="table-actions">
-                        <button type="button" className="button button--secondary" onClick={() => aoEditarProduto(produto)} aria-label={`Editar produto ${produto.codigo}`}>Editar</button>
-                        <button type="button" className="button button--danger" onClick={() => aoExcluirProduto(produto.codigo)} aria-label={`Excluir produto ${produto.codigo}`}>Excluir</button>
+                        <button
+                          type="button"
+                          className="button button--secondary"
+                          onClick={() => aoEditarProduto(produto)}
+                          aria-label={`Editar produto ${produto.codigo}`}
+                        >
+                          Editar
+                        </button>
+                        <button
+                          type="button"
+                          className="button button--danger"
+                          onClick={() => aoExcluirProduto(produto.codigo)}
+                          aria-label={`Excluir produto ${produto.codigo}`}
+                        >
+                          Excluir
+                        </button>
                       </div>
                     </td>
                   </tr>

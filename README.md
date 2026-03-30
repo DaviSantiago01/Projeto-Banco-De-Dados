@@ -29,7 +29,7 @@ Resumo das responsabilidades:
 - `.env`: configuração local do banco usada pelo backend e pelo script de reset
 - `.env.example`: modelo da configuração local
 - `scripts/start-db.ps1`: inicia o serviço local do PostgreSQL no Windows
-- `scripts/reset-db.ps1`: recria o schema do banco configurado no `.env` e reaplica os scripts SQL
+- `scripts/reset-db.ps1`: lê o `.env`, recria o schema do banco configurado e reaplica os scripts SQL
 - `sql/01_create_schema.sql`: criação do esquema relacional
 - `sql/02_insert_data.sql`: carga inicial do banco
 
@@ -66,6 +66,7 @@ DB_PASSWORD=postgres
 ```
 
 O `reset-db.ps1` também lê esse mesmo `.env`, então não é necessário repetir a senha na linha de comando.
+O script usa os dados do `DB_URL`, `DB_USER` e `DB_PASSWORD` para localizar o banco e aplicar o reset.
 
 ## Carga inicial
 

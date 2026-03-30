@@ -39,7 +39,10 @@ public class VendaController {
     }
 
     @PutMapping("/{numero}")
-    public Venda atualizar(@PathVariable Integer numero, @Valid @RequestBody Venda venda) throws SQLException {
+    public Venda atualizar(
+        @PathVariable Integer numero,
+        @Valid @RequestBody Venda venda
+    ) throws SQLException {
         // Usa o numero da URL para evitar divergencia com o corpo enviado pela tela.
         venda.setNumero(numero);
         Venda vendaAtualizada = vendaDao.atualizar(numero, venda);

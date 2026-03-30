@@ -53,7 +53,14 @@ public class VendaDao {
 
     public Venda inserir(Venda venda) throws SQLException {
         String sql = """
-            INSERT INTO venda (numero, data_hora, valor_total, forma_pagamento, cpf_cliente, mat_atendente)
+            INSERT INTO venda (
+                numero,
+                data_hora,
+                valor_total,
+                forma_pagamento,
+                cpf_cliente,
+                mat_atendente
+            )
             VALUES (?, ?, ?, ?, ?, ?)
             """;
 
@@ -71,7 +78,12 @@ public class VendaDao {
     public Venda atualizar(Integer numero, Venda venda) throws SQLException {
         String sql = """
             UPDATE venda
-            SET data_hora = ?, valor_total = ?, forma_pagamento = ?, cpf_cliente = ?, mat_atendente = ?
+            SET
+                data_hora = ?,
+                valor_total = ?,
+                forma_pagamento = ?,
+                cpf_cliente = ?,
+                mat_atendente = ?
             WHERE numero = ?
             """;
 
