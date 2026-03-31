@@ -65,15 +65,11 @@ DB_USER=postgres
 DB_PASSWORD=postgres
 ```
 
-O `reset-db.ps1` também lê esse mesmo `.env`, então não é necessário repetir a senha na linha de comando.
-O script usa os dados do `DB_URL`, `DB_USER` e `DB_PASSWORD` para localizar o banco e aplicar o reset.
+O `reset-db.ps1` também lê esse mesmo `.env`, então não é necessário repetir a senha na linha de comando. O script usa os dados do `DB_URL`, `DB_USER` e `DB_PASSWORD` para localizar o banco e aplicar o reset.
 
 ## Carga inicial
 
-Os scripts SQL deixam a base pronta para demonstração e testes locais.
-Eles inserem dados de referência do projeto, como categorias, clientes, atendentes,
-produtos, vendas e demais registros do modelo para que o sistema já abra com
-informações disponíveis.
+Os scripts SQL deixam a base pronta para demonstração e testes locais. Eles inserem dados de referência do projeto, como categorias, clientes, atendentes, produtos, vendas e demais registros do modelo para que o sistema já abra com informações disponíveis.
 
 ## Backend
 
@@ -84,8 +80,7 @@ Pastas importantes:
 - `src/main`: código-fonte real da API
 - `src/test`: testes automatizados, quando existirem
 
-O backend lê `DB_URL`, `DB_USER` e `DB_PASSWORD` automaticamente do `.env` da raiz do projeto.
-No `npm run dev`, a variável `FRONTEND_ORIGIN` é definida para liberar o frontend local.
+O backend lê `DB_URL`, `DB_USER` e `DB_PASSWORD` automaticamente do `.env` da raiz do projeto. No `npm run dev`, a variável `FRONTEND_ORIGIN` é definida para liberar o frontend local.
 
 Build do backend:
 
@@ -124,8 +119,7 @@ Além disso, a tela também consulta:
 - `clientes`: para preencher o formulário de vendas
 - `atendentes`: para preencher o formulário de vendas
 
-As demais tabelas do banco fazem parte da modelagem e da integridade dos dados,
-mas não possuem CRUD próprio na interface atual.
+As demais tabelas do banco fazem parte da modelagem e da integridade dos dados, mas não possuem CRUD próprio na interface atual.
 
 ## Arquivos principais
 
