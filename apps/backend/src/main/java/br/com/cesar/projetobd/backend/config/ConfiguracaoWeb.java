@@ -1,5 +1,6 @@
 package br.com.cesar.projetobd.backend.config;
 
+import java.util.Arrays;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -16,8 +17,13 @@ public class ConfiguracaoWeb implements WebMvcConfigurer {
 
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        String[] origensPermitidas = Arrays.stream(origemFrontend.split(","))
+            .map(String::trim)
+            .filter((origem) -> !origem.isEmpty())
+            .toArray(String[]::new);
+
         registry.addMapping("/api/**")
-            .allowedOrigins(origemFrontend.split(","))
+            .allowedOrigins(origensPermitidas)
             .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
             .allowedHeaders("*");
     }
