@@ -2,6 +2,12 @@
 
 Aplicação acadêmica da disciplina Banco de Dados 2026.1 com modelagem relacional, backend Java em JDBC e interface web para operar o catálogo e as vendas da loja.
 
+## Integrantes do grupo
+
+- Davi Santiago
+- João Pedro Rodrigues
+- José Jorge
+
 ## Stack oficial
 
 - Backend: Java 21, Spring Boot, JDBC puro e SQL manual
