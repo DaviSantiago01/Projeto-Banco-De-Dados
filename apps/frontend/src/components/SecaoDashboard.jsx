@@ -1,32 +1,42 @@
-import { useState } from 'react';
-import { formatarMoeda } from '../lib/formatadores';
-import { PainelSecao } from './PainelSecao';
+import { useState } from "react";
+import { formatarMoeda } from "../lib/formatadores";
+import { PainelSecao } from "./PainelSecao";
 
-const CORES_GRAFICO = ['#5f7cff', '#5de0aa', '#f4c95d', '#fb8f67', '#73c1ff', '#b58cff'];
+const CORES_GRAFICO = [
+  "#5f7cff",
+  "#5de0aa",
+  "#f4c95d",
+  "#fb8f67",
+  "#73c1ff",
+  "#b58cff",
+];
 
 function somarValoresVendas(vendas) {
-  return vendas.reduce((acumulado, venda) => acumulado + Number(venda.valorTotal ?? 0), 0);
+  return vendas.reduce(
+    (acumulado, venda) => acumulado + Number(venda.valorTotal ?? 0),
+    0,
+  );
 }
 
 function formatarNumero(valor, casas = 0) {
-  return Number(valor ?? 0).toLocaleString('pt-BR', {
+  return Number(valor ?? 0).toLocaleString("pt-BR", {
     minimumFractionDigits: casas,
     maximumFractionDigits: casas,
   });
 }
 
 function formatarDataIsoCurta(valor) {
-  return valor ? String(valor).slice(0, 10) : '';
+  return valor ? String(valor).slice(0, 10) : "";
 }
 
 function formatarDataRotulo(valor) {
   if (!valor) {
-    return 'Sem data';
+    return "Sem data";
   }
 
-  return new Intl.DateTimeFormat('pt-BR', {
-    day: '2-digit',
-    month: '2-digit',
+  return new Intl.DateTimeFormat("pt-BR", {
+    day: "2-digit",
+    month: "2-digit",
   }).format(new Date(`${valor}T00:00:00`));
 }
 
@@ -54,17 +64,17 @@ function obterInicioSemana(dataIso) {
 }
 
 function montarChaveTemporal(dataIso, granularidade) {
-  if (granularidade === 'mensal') {
+  if (granularidade === "mensal") {
     return {
       chave: dataIso.slice(0, 7),
-      rotulo: new Intl.DateTimeFormat('pt-BR', {
-        month: 'short',
-        year: '2-digit',
+      rotulo: new Intl.DateTimeFormat("pt-BR", {
+        month: "short",
+        year: "2-digit",
       }).format(new Date(`${dataIso.slice(0, 7)}-01T00:00:00`)),
     };
   }
 
-  if (granularidade === 'semanal') {
+  if (granularidade === "semanal") {
     const inicioSemana = obterInicioSemana(dataIso);
     return {
       chave: inicioSemana,
@@ -89,29 +99,29 @@ function montarResumoDashboard({ clientes, vendas, viewVendasDetalhadas }) {
 
   return [
     {
-      titulo: 'Total de vendas',
-      valor: totalVendas.toLocaleString('pt-BR'),
-      detalhe: 'registros confirmados',
+      titulo: "Total de vendas",
+      valor: totalVendas.toLocaleString("pt-BR"),
+      detalhe: "registros confirmados",
     },
     {
-      titulo: 'Faturamento total',
+      titulo: "Faturamento total",
       valor: formatarMoeda(faturamentoTotal),
-      detalhe: 'receita total registrada',
+      detalhe: "receita total registrada",
     },
     {
-      titulo: 'Ticket medio',
+      titulo: "Ticket medio",
       valor: formatarMoeda(ticketMedio),
-      detalhe: 'valor medio por venda',
+      detalhe: "valor medio por venda",
     },
     {
-      titulo: 'Total de clientes',
-      valor: clientes.length.toLocaleString('pt-BR'),
-      detalhe: 'clientes cadastrados',
+      titulo: "Total de clientes",
+      valor: clientes.length.toLocaleString("pt-BR"),
+      detalhe: "clientes cadastrados",
     },
     {
-      titulo: 'Itens vendidos',
+      titulo: "Itens vendidos",
       valor: formatarNumero(totalItensVendidos),
-      detalhe: 'quantidade total vendida',
+      detalhe: "quantidade total vendida",
     },
   ];
 }
@@ -123,7 +133,11 @@ function montarFaturamentoTemporal(detalhes, vendas, granularidade) {
     detalhes.forEach((item) => {
       const dataIso = formatarDataIsoCurta(item.data_hora);
       const grupo = montarChaveTemporal(dataIso, granularidade);
-      const atual = grupos.get(grupo.chave) ?? { ...grupo, valor: 0, vendas: new Set() };
+      const atual = grupos.get(grupo.chave) ?? {
+        ...grupo,
+        valor: 0,
+        vendas: new Set(),
+      };
       atual.valor += Number(item.subtotal_item ?? 0);
       if (item.numero_venda != null) {
         atual.vendas.add(item.numero_venda);
@@ -134,7 +148,11 @@ function montarFaturamentoTemporal(detalhes, vendas, granularidade) {
     vendas.forEach((venda, indice) => {
       const dataIso = formatarDataIsoCurta(venda.dataHora);
       const grupo = montarChaveTemporal(dataIso, granularidade);
-      const atual = grupos.get(grupo.chave) ?? { ...grupo, valor: 0, vendas: new Set() };
+      const atual = grupos.get(grupo.chave) ?? {
+        ...grupo,
+        valor: 0,
+        vendas: new Set(),
+      };
       atual.valor += Number(venda.valorTotal ?? 0);
       atual.vendas.add(venda.numero ?? `${grupo.chave}-${indice}`);
       grupos.set(grupo.chave, atual);
@@ -153,7 +171,7 @@ function BotaoFiltro({ aberto, rotulo, aoClique }) {
   return (
     <button
       type="button"
-      className={`input input--compact dashboard-select-trigger${aberto ? ' dashboard-select-trigger--active' : ''}`}
+      className={`input input--compact dashboard-select-trigger${aberto ? " dashboard-select-trigger--active" : ""}`}
       onClick={aoClique}
       aria-expanded={aberto}
     >
@@ -176,7 +194,7 @@ function montarMeiosPagamento(vendas, meiosOcultos) {
   return [...pagamentosMap.entries()]
     .map(([chave, valor]) => ({
       chave,
-      rotulo: chave.replaceAll('_', ' '),
+      rotulo: chave.replaceAll("_", " "),
       valor,
       ativo: !meiosOcultos.includes(chave),
     }))
@@ -185,15 +203,22 @@ function montarMeiosPagamento(vendas, meiosOcultos) {
 
 function montarFaixasValorVendas(vendas) {
   const faixas = [
-    { chave: 'faixa-1', rotulo: 'Até R$ 100', minimo: 0, maximo: 100 },
-    { chave: 'faixa-2', rotulo: 'R$ 100 a R$ 300', minimo: 100, maximo: 300 },
-    { chave: 'faixa-3', rotulo: 'R$ 300 a R$ 600', minimo: 300, maximo: 600 },
-    { chave: 'faixa-4', rotulo: 'Acima de R$ 600', minimo: 600, maximo: Number.POSITIVE_INFINITY },
+    { chave: "faixa-1", rotulo: "Até R$ 100", minimo: 0, maximo: 100 },
+    { chave: "faixa-2", rotulo: "R$ 100 a R$ 300", minimo: 100, maximo: 300 },
+    { chave: "faixa-3", rotulo: "R$ 300 a R$ 600", minimo: 300, maximo: 600 },
+    {
+      chave: "faixa-4",
+      rotulo: "Acima de R$ 600",
+      minimo: 600,
+      maximo: Number.POSITIVE_INFINITY,
+    },
   ].map((faixa) => ({ ...faixa, valor: 0 }));
 
   vendas.forEach((venda) => {
     const valor = Number(venda.valorTotal ?? 0);
-    const faixa = faixas.find((item) => valor >= item.minimo && valor < item.maximo);
+    const faixa = faixas.find(
+      (item) => valor >= item.minimo && valor < item.maximo,
+    );
 
     if (faixa) {
       faixa.valor += 1;
@@ -208,25 +233,36 @@ function montarFaixasValorVendas(vendas) {
   }));
 }
 
-function BarraLegenda({ itens, sufixo = '', casas = 0 }) {
+function BarraLegenda({ itens, sufixo = "", casas = 0 }) {
   if (itens.length === 0) {
-    return <p className="chart-empty">Nenhum dado disponivel para o filtro atual.</p>;
+    return (
+      <p className="chart-empty">Nenhum dado disponivel para o filtro atual.</p>
+    );
   }
 
   const maiorValor = Math.max(...itens.map((item) => item.valor), 1);
 
   return (
-    <div className="chart-bars chart-bars--horizontal" role="img" aria-label="Grafico de barras">
+    <div
+      className="chart-bars chart-bars--horizontal"
+      role="img"
+      aria-label="Grafico de barras"
+    >
       {itens.map((item) => (
         <article key={item.chave ?? item.rotulo} className="chart-bars__item">
           <div className="chart-bars__meta">
             <strong>{item.rotulo}</strong>
-            <span>{formatarNumero(item.valor, casas)}{sufixo}</span>
+            <span>
+              {formatarNumero(item.valor, casas)}
+              {sufixo}
+            </span>
           </div>
           <div className="chart-bars__track">
             <span
               className="chart-bars__fill"
-              style={{ width: `${Math.max((item.valor / maiorValor) * 100, 6)}%` }}
+              style={{
+                width: `${Math.max((item.valor / maiorValor) * 100, 6)}%`,
+              }}
             />
           </div>
           {item.descricao ? <small>{item.descricao}</small> : null}
@@ -238,7 +274,9 @@ function BarraLegenda({ itens, sufixo = '', casas = 0 }) {
 
 function GraficoLinha({ pontos }) {
   if (pontos.length === 0) {
-    return <p className="chart-empty">Nenhum dado disponivel para o filtro atual.</p>;
+    return (
+      <p className="chart-empty">Nenhum dado disponivel para o filtro atual.</p>
+    );
   }
 
   const [indiceAtivo, setIndiceAtivo] = useState(null);
@@ -247,17 +285,22 @@ function GraficoLinha({ pontos }) {
   const margemX = 26;
   const margemY = 20;
   const maiorValor = Math.max(...pontos.map((ponto) => ponto.valor), 1);
-  const passoX = pontos.length > 1 ? (largura - margemX * 2) / (pontos.length - 1) : 0;
+  const passoX =
+    pontos.length > 1 ? (largura - margemX * 2) / (pontos.length - 1) : 0;
   const coordenadas = pontos.map((ponto, indice) => {
     const x = margemX + indice * passoX;
-    const y = altura - margemY - (ponto.valor / maiorValor) * (altura - margemY * 2);
+    const y =
+      altura - margemY - (ponto.valor / maiorValor) * (altura - margemY * 2);
     return { ...ponto, x, y };
   });
   const caminho = coordenadas
-    .map((ponto, indice) => `${indice === 0 ? 'M' : 'L'} ${ponto.x} ${ponto.y}`)
-    .join(' ');
+    .map((ponto, indice) => `${indice === 0 ? "M" : "L"} ${ponto.x} ${ponto.y}`)
+    .join(" ");
   const area = `${caminho} L ${largura - margemX} ${altura - margemY} L ${margemX} ${altura - margemY} Z`;
-  const totalPeriodo = pontos.reduce((acumulado, ponto) => acumulado + ponto.valor, 0);
+  const totalPeriodo = pontos.reduce(
+    (acumulado, ponto) => acumulado + ponto.valor,
+    0,
+  );
   const totalVendas = pontos.reduce(
     (acumulado, ponto) => acumulado + Number(ponto.totalVendas ?? 0),
     0,
@@ -267,11 +310,16 @@ function GraficoLinha({ pontos }) {
   function lidarMouseMove(evento) {
     const { left, width } = evento.currentTarget.getBoundingClientRect();
     const xRelativo = ((evento.clientX - left) / width) * largura;
-    const indiceMaisProximo = coordenadas.reduce((maisProximo, ponto, indice) => {
-      const distanciaAtual = Math.abs(ponto.x - xRelativo);
-      const distanciaMaisProxima = Math.abs(coordenadas[maisProximo].x - xRelativo);
-      return distanciaAtual < distanciaMaisProxima ? indice : maisProximo;
-    }, 0);
+    const indiceMaisProximo = coordenadas.reduce(
+      (maisProximo, ponto, indice) => {
+        const distanciaAtual = Math.abs(ponto.x - xRelativo);
+        const distanciaMaisProxima = Math.abs(
+          coordenadas[maisProximo].x - xRelativo,
+        );
+        return distanciaAtual < distanciaMaisProxima ? indice : maisProximo;
+      },
+      0,
+    );
     setIndiceAtivo(indiceMaisProximo);
   }
 
@@ -329,7 +377,7 @@ function GraficoLinha({ pontos }) {
             cx={ponto.x}
             cy={ponto.y}
             r={indice === indiceAtivo ? 6 : 4}
-            className={`line-chart__point${indice === indiceAtivo ? ' line-chart__point--active' : ''}`}
+            className={`line-chart__point${indice === indiceAtivo ? " line-chart__point--active" : ""}`}
           />
         ))}
         {pontoAtivo ? (
@@ -362,16 +410,25 @@ function GraficoRosca({ itens }) {
   const itensAtivos = itens.filter((item) => item.ativo);
 
   if (itensAtivos.length === 0) {
-    return <p className="chart-empty">Selecione ao menos um meio de pagamento no filtro.</p>;
+    return (
+      <p className="chart-empty">
+        Selecione ao menos um meio de pagamento no filtro.
+      </p>
+    );
   }
 
-  const total = itensAtivos.reduce((acumulado, item) => acumulado + item.valor, 0);
+  const total = itensAtivos.reduce(
+    (acumulado, item) => acumulado + item.valor,
+    0,
+  );
   const { segmentos } = itensAtivos.reduce(
     (estadoAtual, item, indice) => {
       const inicio = (estadoAtual.acumulado / total) * 360;
       const novoAcumulado = estadoAtual.acumulado + item.valor;
       const fim = (novoAcumulado / total) * 360;
-      estadoAtual.segmentos.push(`${CORES_GRAFICO[indice % CORES_GRAFICO.length]} ${inicio}deg ${fim}deg`);
+      estadoAtual.segmentos.push(
+        `${CORES_GRAFICO[indice % CORES_GRAFICO.length]} ${inicio}deg ${fim}deg`,
+      );
       estadoAtual.acumulado = novoAcumulado;
       return estadoAtual;
     },
@@ -382,7 +439,7 @@ function GraficoRosca({ itens }) {
     <div className="donut-chart">
       <div
         className="donut-chart__ring"
-        style={{ background: `conic-gradient(${segmentos.join(', ')})` }}
+        style={{ background: `conic-gradient(${segmentos.join(", ")})` }}
         aria-hidden="true"
       >
         <div className="donut-chart__hole">
@@ -394,17 +451,21 @@ function GraficoRosca({ itens }) {
         {itens.map((item, indice) => (
           <div
             key={item.chave}
-            className={`payment-legend-item${item.ativo ? '' : ' payment-legend-item--muted'}`}
+            className={`payment-legend-item${item.ativo ? "" : " payment-legend-item--muted"}`}
           >
             <span
               className="donut-chart__swatch"
-              style={{ backgroundColor: CORES_GRAFICO[indice % CORES_GRAFICO.length] }}
+              style={{
+                backgroundColor: CORES_GRAFICO[indice % CORES_GRAFICO.length],
+              }}
             />
             <span>
               <strong>{item.rotulo}</strong>
               <small>
                 {formatarNumero(item.valor)} registros
-                {item.ativo ? ` (${formatarNumero((item.valor / total) * 100, 1)}%)` : ''}
+                {item.ativo
+                  ? ` (${formatarNumero((item.valor / total) * 100, 1)}%)`
+                  : ""}
               </small>
             </span>
           </div>
@@ -414,43 +475,68 @@ function GraficoRosca({ itens }) {
   );
 }
 
-export function SecaoDashboard({ clientes = [], vendas = [], viewVendasDetalhadas = [] }) {
-  const [dataInicioVendas, setDataInicioVendas] = useState('');
-  const [dataFimVendas, setDataFimVendas] = useState('');
+export function SecaoDashboard({
+  clientes = [],
+  vendas = [],
+  viewVendasDetalhadas = [],
+}) {
+  const [dataInicioVendas, setDataInicioVendas] = useState("");
+  const [dataFimVendas, setDataFimVendas] = useState("");
   const [meiosOcultos, setMeiosOcultos] = useState([]);
   const [filtroPeriodoAberto, setFiltroPeriodoAberto] = useState(false);
   const [filtroPagamentoAberto, setFiltroPagamentoAberto] = useState(false);
-  const cards = montarResumoDashboard({ clientes, vendas, viewVendasDetalhadas });
+  const cards = montarResumoDashboard({
+    clientes,
+    vendas,
+    viewVendasDetalhadas,
+  });
   const vendasFiltradasNoPeriodo = vendas.filter((venda) =>
-    estaDentroDoPeriodo(formatarDataIsoCurta(venda.dataHora), dataInicioVendas, dataFimVendas),
+    estaDentroDoPeriodo(
+      formatarDataIsoCurta(venda.dataHora),
+      dataInicioVendas,
+      dataFimVendas,
+    ),
   );
   const detalhesFiltradosNoPeriodo = viewVendasDetalhadas.filter((item) =>
-    estaDentroDoPeriodo(formatarDataIsoCurta(item.data_hora), dataInicioVendas, dataFimVendas),
+    estaDentroDoPeriodo(
+      formatarDataIsoCurta(item.data_hora),
+      dataInicioVendas,
+      dataFimVendas,
+    ),
   );
   const evolucaoVendas = montarFaturamentoTemporal(
     detalhesFiltradosNoPeriodo,
     vendasFiltradasNoPeriodo,
-    'diario',
+    "diario",
   );
   const faixasValorVendas = montarFaixasValorVendas(vendasFiltradasNoPeriodo);
   const meiosPagamento = montarMeiosPagamento(vendas, meiosOcultos);
 
   function alternarMeioPagamento(chave) {
     setMeiosOcultos((atuais) =>
-      atuais.includes(chave) ? atuais.filter((item) => item !== chave) : [...atuais, chave],
+      atuais.includes(chave)
+        ? atuais.filter((item) => item !== chave)
+        : [...atuais, chave],
     );
   }
 
   const rotuloPeriodo =
     dataInicioVendas || dataFimVendas
-      ? `${dataInicioVendas || 'inicio'} ate ${dataFimVendas || 'fim'}`
-      : 'Periodo';
+      ? `${dataInicioVendas || "inicio"} ate ${dataFimVendas || "fim"}`
+      : "Periodo";
   const totalMeiosAtivos = meiosPagamento.filter((item) => item.ativo).length;
   const rotuloPagamento =
-    totalMeiosAtivos === meiosPagamento.length ? 'Todos os meios' : `${totalMeiosAtivos} meios`;
+    totalMeiosAtivos === meiosPagamento.length
+      ? "Todos os meios"
+      : `${totalMeiosAtivos} meios`;
 
   return (
-    <div id="panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard" className="panel-stack">
+    <div
+      id="panel-dashboard"
+      role="tabpanel"
+      aria-labelledby="tab-dashboard"
+      className="panel-stack"
+    >
       <section className="dashboard-cards">
         {cards.map((card) => (
           <article key={card.titulo} className="dashboard-card">
@@ -482,7 +568,9 @@ export function SecaoDashboard({ clientes = [], vendas = [], viewVendasDetalhada
                   className="input input--compact"
                   value={dataInicioVendas}
                   max={dataFimVendas || undefined}
-                  onChange={(evento) => setDataInicioVendas(evento.target.value)}
+                  onChange={(evento) =>
+                    setDataInicioVendas(evento.target.value)
+                  }
                 />
               </label>
               <label className="form-field">
