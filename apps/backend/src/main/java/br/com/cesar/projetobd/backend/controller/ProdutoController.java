@@ -1,8 +1,10 @@
 package br.com.cesar.projetobd.backend.controller;
 
 import br.com.cesar.projetobd.backend.dao.ProdutoDao;
+import br.com.cesar.projetobd.backend.model.AtualizacaoPrecoProdutoRequest;
+import br.com.cesar.projetobd.backend.model.LogAlteracaoPreco;
+import br.com.cesar.projetobd.backend.model.MelhorFornecedorProduto;
 import br.com.cesar.projetobd.backend.model.Produto;
-import jakarta.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -32,20 +34,64 @@ public class ProdutoController {
         return produtoDao.listarTodos();
     }
 
+    @GetMapping("/logs/alteracao-preco")
+    public List<LogAlteracaoPreco> listarLogsAlteracaoPreco() throws SQLException {
+        return produtoDao.listarLogsAlteracaoPreco();
+    }
+
+    @GetMapping("/{codigo}/melhor-fornecedor")
+    public MelhorFornecedorProduto buscarMelhorFornecedor(@PathVariable String codigo)
+        throws SQLException {
+        MelhorFornecedorProduto melhorFornecedor = produtoDao.buscarMelhorFornecedorProduto(codigo);
+
+        if (melhorFornecedor == null) {
+            throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND,
+                "Nao foi encontrado fornecedor para o produto informado."
+            );
+        }
+
+        return melhorFornecedor;
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Produto criar(@Valid @RequestBody Produto produto) throws SQLException {
+    public Produto criar(@RequestBody Produto produto) throws SQLException {
         return produtoDao.inserir(produto);
     }
 
     @PutMapping("/{codigo}")
     public Produto atualizar(
         @PathVariable String codigo,
-        @Valid @RequestBody Produto produto
+        @RequestBody Produto produto
     ) throws SQLException {
         // Usa o codigo da URL para evitar divergencia com o corpo enviado pela tela.
         produto.setCodigo(codigo);
         Produto produtoAtualizado = produtoDao.atualizar(codigo, produto);
+
+        if (produtoAtualizado == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto nao encontrado.");
+        }
+
+        return produtoAtualizado;
+    }
+
+    @PostMapping("/{codigo}/atualizar-preco-procedimento")
+    public Produto atualizarPrecoViaProcedimento(
+        @PathVariable String codigo,
+        @RequestBody AtualizacaoPrecoProdutoRequest requisicao
+    ) throws SQLException {
+        if (requisicao == null || requisicao.getNovoPreco() == null) {
+            throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST,
+                "Informe o novo preco para executar o procedimento."
+            );
+        }
+
+        Produto produtoAtualizado = produtoDao.atualizarPrecoViaProcedimento(
+            codigo,
+            requisicao.getNovoPreco()
+        );
 
         if (produtoAtualizado == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Produto nao encontrado.");

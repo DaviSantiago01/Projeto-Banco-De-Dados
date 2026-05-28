@@ -4,9 +4,6 @@ import java.sql.SQLException;
 import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.FieldError;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,23 +20,6 @@ public class ApiExceptionHandler {
         return ResponseEntity
             .status(exception.getStatusCode())
             .body(Map.of("message", mensagem));
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, String>> tratarValidacao(MethodArgumentNotValidException exception) {
-        FieldError erroCampo = exception.getBindingResult().getFieldError();
-        String mensagem = erroCampo != null
-            ? "Campo invalido: " + erroCampo.getField() + "."
-            : "Um ou mais campos estao invalidos.";
-
-        return ResponseEntity.badRequest().body(Map.of("message", mensagem));
-    }
-
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<Map<String, String>> tratarCorpoInvalido(HttpMessageNotReadableException exception) {
-        return ResponseEntity
-            .badRequest()
-            .body(Map.of("message", "Corpo da requisicao em formato invalido."));
     }
 
     @ExceptionHandler(SQLException.class)

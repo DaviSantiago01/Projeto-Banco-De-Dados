@@ -1,23 +1,27 @@
 :root {
-  --canvas: #0f1b2d;
-  --canvas-deep: #0a1321;
-  --surface: rgba(255, 255, 255, 0.94);
-  --surface-muted: rgba(235, 241, 249, 0.86);
-  --line: rgba(149, 169, 194, 0.24);
-  --line-strong: rgba(165, 186, 213, 0.36);
-  --ink: #0f2035;
-  --muted: #58667b;
-  --muted-soft: #7e8da2;
+  --canvas: #090f1c;
+  --canvas-deep: #050b14;
+  --surface: rgba(14, 22, 38, 0.80);
+  --surface-strong: rgba(18, 28, 48, 0.95);
+  --surface-muted: rgba(22, 34, 58, 0.72);
+  --line: rgba(149, 169, 194, 0.18);
+  --line-strong: rgba(165, 186, 213, 0.28);
+  --ink: #eff4fc;
+  --text-strong: #f4f7fd;
+  --text-soft: rgba(214, 225, 242, 0.76);
+  --text-muted: rgba(188, 203, 228, 0.58);
+  --muted: rgba(188, 203, 228, 0.58);
+  --muted-soft: rgba(188, 203, 228, 0.42);
   --accent: #5d8bff;
   --accent-strong: #335fd1;
-  --danger: #b5584a;
-  --shadow-soft: 0 24px 50px rgba(4, 13, 26, 0.28);
-  --radius-lg: 20px;
-  --radius-md: 14px;
+  --danger: #e9705c;
+  --shadow-soft: 0 26px 56px rgba(4, 11, 22, 0.32);
+  --radius-lg: 24px;
+  --radius-md: 16px;
   --sans: 'Poppins', 'Segoe UI', sans-serif;
-  --display: 'Fraunces', Georgia, serif;
+  --display: var(--sans);
   font-family: var(--sans);
-  color: #edf3fb;
+  color: var(--text-strong);
   background: var(--canvas);
   color-scheme: dark;
   font-synthesis: none;
@@ -34,15 +38,14 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   margin: 0;
   min-width: 320px;
-  background:
-    radial-gradient(circle at top left, rgba(93, 139, 255, 0.24), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(127, 168, 255, 0.14), transparent 28%),
-    linear-gradient(180deg, #12213a 0%, #0f1b2d 48%, #0a1321 100%);
+  background: var(--canvas);
+  overflow-x: hidden;
 }
 
 button,
@@ -67,6 +70,7 @@ a {
 
 #root {
   min-height: 100dvh;
+  overflow-x: hidden;
 }
 
 .sr-only {

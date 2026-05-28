@@ -1,4 +1,5 @@
 import { CampoFormulario } from './CampoFormulario';
+import { ModalFormulario } from './ModalFormulario';
 import { PainelSecao } from './PainelSecao';
 import { formatarDataHora, formatarMoeda } from '../lib/formatadores';
 
@@ -11,31 +12,28 @@ export function SecaoVendas({
   numeroVendaEmEdicao,
   vendasFiltradas,
   carregando,
+  modalVendaAberto,
   salvandoVenda,
+  aoAbrirNovaVenda,
   aoExcluirVenda,
   aoEditarVenda,
   aoLimparVenda,
   aoMudarCampoVenda,
-  aoMudarBuscaVenda,
   aoSalvarVenda,
   formularioVenda,
-  buscaVenda,
   mensagemTabelaVendas,
 }) {
   return (
-    <div
-      id="panel-vendas"
-      role="tabpanel"
-      aria-labelledby="tab-vendas"
-      className="module-grid"
-    >
-      <PainelSecao
+    <div id="panel-vendas" role="tabpanel" aria-labelledby="tab-vendas" className="panel-stack">
+      <ModalFormulario
+        aberto={modalVendaAberto}
         titulo={numeroVendaEmEdicao ? 'Editar venda' : 'Nova venda'}
         descricao="Registre a venda com data, forma de pagamento, cliente e atendente."
+        aoFechar={aoLimparVenda}
       >
         <form className="editor-form" onSubmit={aoSalvarVenda}>
           <div className="editor-form__grid">
-            <CampoFormulario htmlFor="venda-numero" rotulo="Numero">
+            <CampoFormulario htmlFor="venda-numero" rotulo="Número">
               <input
                 id="venda-numero"
                 name="numero"
@@ -113,7 +111,7 @@ export function SecaoVendas({
             </CampoFormulario>
             <CampoFormulario
               htmlFor="venda-atendente"
-              rotulo="Atendente / Matricula"
+              rotulo="Atendente / Matrícula"
               ajuda="Selecione um atendente cadastrado."
             >
               <select
@@ -127,7 +125,7 @@ export function SecaoVendas({
                 <option value="">Selecione</option>
                 {atendentes.map((atendente) => (
                   <option key={atendente.matricula} value={atendente.matricula}>
-                    Atendente: {atendente.nome} | Matricula: {atendente.matricula}
+                    Atendente: {atendente.nome} | Matrícula: {atendente.matricula}
                   </option>
                 ))}
               </select>
@@ -146,24 +144,18 @@ export function SecaoVendas({
             </button>
           </div>
         </form>
-      </PainelSecao>
+      </ModalFormulario>
 
+      <div className="view-block">
       <PainelSecao
         titulo="Lista de vendas"
-        descricao="Acompanhe o historico de vendas e use a busca para localizar registros especificos."
+        descricao="Acompanhe o histórico de vendas e gerencie os registros diretamente pela lista."
         acoes={
-          <label className="search-field" htmlFor="busca-vendas">
-            <span className="sr-only">Buscar vendas</span>
-            <input
-              id="busca-vendas"
-              name="busca-vendas"
-              type="search"
-              value={buscaVenda}
-              onChange={aoMudarBuscaVenda}
-              placeholder="Buscar por numero, cliente ou pagamento..."
-              autoComplete="off"
-            />
-          </label>
+          <div className="panel-actions panel-actions--end">
+            <button type="button" className="button button--primary" onClick={aoAbrirNovaVenda}>
+              Nova venda
+            </button>
+          </div>
         }
       >
         <div className="table-wrap">
@@ -172,13 +164,13 @@ export function SecaoVendas({
               <caption className="sr-only">Lista de vendas cadastradas</caption>
               <thead>
                 <tr>
-                  <th>Numero</th>
+                  <th>Número</th>
                   <th>Cliente</th>
                   <th>Atendente</th>
                   <th>Pagamento</th>
                   <th>Data</th>
                   <th>Valor</th>
-                  <th>Acoes</th>
+                  <th>Ações</th>
                 </tr>
               </thead>
               <tbody>
@@ -230,6 +222,7 @@ export function SecaoVendas({
           </div>
         </div>
       </PainelSecao>
+      </div>
     </div>
   );
 }

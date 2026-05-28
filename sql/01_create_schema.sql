@@ -1,7 +1,21 @@
 BEGIN;
 
-CREATE SEQUENCE seq_dependente_numero START WITH 1 INCREMENT BY 1;
-CREATE SEQUENCE seq_venda_numero START WITH 1 INCREMENT BY 1;
+DROP TABLE IF EXISTS entrega CASCADE;
+DROP TABLE IF EXISTS contem CASCADE;
+DROP TABLE IF EXISTS venda CASCADE;
+DROP TABLE IF EXISTS transportadora CASCADE;
+DROP TABLE IF EXISTS fornece CASCADE;
+DROP TABLE IF EXISTS telefone_fornecedor CASCADE;
+DROP TABLE IF EXISTS fornecedor CASCADE;
+DROP TABLE IF EXISTS estoque CASCADE;
+DROP TABLE IF EXISTS produto CASCADE;
+DROP TABLE IF EXISTS categoria CASCADE;
+DROP TABLE IF EXISTS telefone_cliente CASCADE;
+DROP TABLE IF EXISTS cliente CASCADE;
+DROP TABLE IF EXISTS dependente CASCADE;
+DROP TABLE IF EXISTS atendente CASCADE;
+DROP TABLE IF EXISTS gerente CASCADE;
+DROP TABLE IF EXISTS funcionario CASCADE;
 
 CREATE TABLE funcionario (
     matricula VARCHAR(10) PRIMARY KEY,
@@ -16,7 +30,6 @@ CREATE TABLE funcionario (
         FOREIGN KEY (mat_supervisor)
         REFERENCES funcionario (matricula)
         ON UPDATE CASCADE
-        ON DELETE SET NULL
 );
 
 CREATE TABLE gerente (
@@ -26,7 +39,6 @@ CREATE TABLE gerente (
     CONSTRAINT fk_gerente_funcionario
         FOREIGN KEY (matricula)
         REFERENCES funcionario (matricula)
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
@@ -36,19 +48,17 @@ CREATE TABLE atendente (
     CONSTRAINT fk_atendente_funcionario
         FOREIGN KEY (matricula)
         REFERENCES funcionario (matricula)
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
 CREATE TABLE dependente (
-    numero INTEGER NOT NULL DEFAULT nextval('seq_dependente_numero'),
+    numero SERIAL,
     nome VARCHAR(100) NOT NULL,
     matricula_funcionario VARCHAR(10) NOT NULL,
     PRIMARY KEY (numero, matricula_funcionario),
     CONSTRAINT fk_dependente_funcionario
         FOREIGN KEY (matricula_funcionario)
         REFERENCES funcionario (matricula)
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
@@ -56,12 +66,10 @@ CREATE TABLE cliente (
     cpf CHAR(11) PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     email VARCHAR(150) UNIQUE,
-    cep CHAR(8) CHECK (cep ~ '^[0-9]{8}$'),
+    cep CHAR(8),
     rua VARCHAR(150),
     numero VARCHAR(10),
-    bairro VARCHAR(100),
-    CONSTRAINT chk_cliente_cpf
-        CHECK (cpf ~ '^[0-9]{11}$')
+    bairro VARCHAR(100)
 );
 
 CREATE TABLE telefone_cliente (
@@ -71,7 +79,6 @@ CREATE TABLE telefone_cliente (
     CONSTRAINT fk_telefone_cliente
         FOREIGN KEY (cpf_cliente)
         REFERENCES cliente (cpf)
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
@@ -91,8 +98,6 @@ CREATE TABLE produto (
     CONSTRAINT fk_produto_categoria
         FOREIGN KEY (cod_categoria)
         REFERENCES categoria (codigo)
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT
 );
 
 CREATE TABLE estoque (
@@ -103,7 +108,6 @@ CREATE TABLE estoque (
     CONSTRAINT fk_estoque_produto
         FOREIGN KEY (cod_produto)
         REFERENCES produto (codigo)
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
@@ -111,12 +115,10 @@ CREATE TABLE fornecedor (
     cnpj CHAR(14) PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     email VARCHAR(150) UNIQUE,
-    cep CHAR(8) CHECK (cep ~ '^[0-9]{8}$'),
+    cep CHAR(8),
     rua VARCHAR(150),
     numero VARCHAR(10),
-    bairro VARCHAR(100),
-    CONSTRAINT chk_fornecedor_cnpj
-        CHECK (cnpj ~ '^[0-9]{14}$')
+    bairro VARCHAR(100)
 );
 
 CREATE TABLE telefone_fornecedor (
@@ -126,7 +128,6 @@ CREATE TABLE telefone_fornecedor (
     CONSTRAINT fk_telefone_fornecedor
         FOREIGN KEY (cnpj_fornecedor)
         REFERENCES fornecedor (cnpj)
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
@@ -139,12 +140,10 @@ CREATE TABLE fornece (
     CONSTRAINT fk_fornece_fornecedor
         FOREIGN KEY (fk_fornecedor_cnpj)
         REFERENCES fornecedor (cnpj)
-        ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT fk_fornece_produto
         FOREIGN KEY (fk_produto_codigo)
         REFERENCES produto (codigo)
-        ON UPDATE CASCADE
         ON DELETE CASCADE
 );
 
@@ -152,30 +151,25 @@ CREATE TABLE transportadora (
     cnpj CHAR(14) PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     telefone VARCHAR(20) NOT NULL,
-    email VARCHAR(150) UNIQUE,
-    CONSTRAINT chk_transportadora_cnpj
-        CHECK (cnpj ~ '^[0-9]{14}$')
+    email VARCHAR(150) UNIQUE
 );
 
 CREATE TABLE venda (
-    numero INTEGER PRIMARY KEY DEFAULT nextval('seq_venda_numero'),
+    numero SERIAL PRIMARY KEY,
     data_hora TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     valor_total NUMERIC(10, 2) NOT NULL CHECK (valor_total >= 0),
     forma_pagamento VARCHAR(50) NOT NULL CHECK (
         forma_pagamento IN ('DINHEIRO', 'CARTAO_CREDITO', 'CARTAO_DEBITO', 'PIX', 'BOLETO')
     ),
     cpf_cliente CHAR(11) NOT NULL,
-    mat_atendente VARCHAR(10) NOT NULL,
+    mat_atendente VARCHAR(10),
     CONSTRAINT fk_venda_cliente
         FOREIGN KEY (cpf_cliente)
-        REFERENCES cliente (cpf)
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT,
+        REFERENCES cliente (cpf),
     CONSTRAINT fk_venda_atendente
         FOREIGN KEY (mat_atendente)
         REFERENCES atendente (matricula)
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT
+        ON DELETE SET NULL
 );
 
 CREATE TABLE contem (
@@ -186,13 +180,10 @@ CREATE TABLE contem (
     CONSTRAINT fk_contem_venda
         FOREIGN KEY (numero_venda)
         REFERENCES venda (numero)
-        ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT fk_contem_produto
         FOREIGN KEY (cod_produto)
         REFERENCES produto (codigo)
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT
 );
 
 CREATE TABLE entrega (
@@ -204,7 +195,7 @@ CREATE TABLE entrega (
     ),
     numero VARCHAR(10),
     rua VARCHAR(150),
-    cep CHAR(8) CHECK (cep ~ '^[0-9]{8}$'),
+    cep CHAR(8),
     bairro VARCHAR(100),
     cnpj_transportadora CHAR(14) NOT NULL,
     CONSTRAINT chk_entrega_datas
@@ -212,13 +203,10 @@ CREATE TABLE entrega (
     CONSTRAINT fk_entrega_venda
         FOREIGN KEY (numero_venda)
         REFERENCES venda (numero)
-        ON UPDATE CASCADE
         ON DELETE CASCADE,
     CONSTRAINT fk_entrega_transportadora
         FOREIGN KEY (cnpj_transportadora)
         REFERENCES transportadora (cnpj)
-        ON UPDATE CASCADE
-        ON DELETE RESTRICT
 );
 
 COMMIT;

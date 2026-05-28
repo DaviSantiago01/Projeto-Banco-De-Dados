@@ -1,37 +1,22 @@
 package br.com.cesar.projetobd.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 // Representa os dados de uma venda trafegando entre API e banco.
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Venda {
-    @NotNull
     private Integer numero;
 
-    @NotNull
     private LocalDateTime dataHora;
 
-    @NotNull
-    @DecimalMin(value = "0.00")
     private BigDecimal valorTotal;
 
-    @NotBlank
-    @Pattern(regexp = "DINHEIRO|CARTAO_CREDITO|CARTAO_DEBITO|PIX|BOLETO")
     private String formaPagamento;
 
-    @NotBlank
-    @Pattern(regexp = "^[0-9]{11}$")
     private String cpfCliente;
 
     private String clienteNome;
 
-    @NotBlank
     private String matAtendente;
 
     private String atendenteNome;

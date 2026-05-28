@@ -82,6 +82,13 @@ $configuracao = Resolve-DbSettings
 $psql = Resolve-PostgresTool
 $schemaPath = (Resolve-Path ".\sql\01_create_schema.sql").Path
 $seedPath = (Resolve-Path ".\sql\02_insert_data.sql").Path
+$structuralSqlPaths = @(
+    (Resolve-Path ".\sql\03_indices.sql").Path,
+    (Resolve-Path ".\sql\04_views.sql").Path,
+    (Resolve-Path ".\sql\06_funcoes.sql").Path,
+    (Resolve-Path ".\sql\07_procedimentos.sql").Path,
+    (Resolve-Path ".\sql\08_triggers.sql").Path
+)
 
 if ($configuracao.Password) {
     $env:PGPASSWORD = $configuracao.Password
@@ -114,6 +121,13 @@ if ($LASTEXITCODE -ne 0) {
 & $psql -h $configuracao.Host -p $configuracao.Port -U $configuracao.User -d $configuracao.Database -f $seedPath
 if ($LASTEXITCODE -ne 0) {
     throw "Falha ao aplicar 02_insert_data.sql."
+}
+
+foreach ($sqlPath in $structuralSqlPaths) {
+    & $psql -h $configuracao.Host -p $configuracao.Port -U $configuracao.User -d $configuracao.Database -f $sqlPath
+    if ($LASTEXITCODE -ne 0) {
+        throw "Falha ao aplicar $([System.IO.Path]::GetFileName($sqlPath))."
+    }
 }
 
 Write-Host "Banco $($configuracao.Database) recriado com sucesso em $($configuracao.Host)`:$($configuracao.Port)."

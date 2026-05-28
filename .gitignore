@@ -4,6 +4,7 @@ apps/*/dist
 apps/backend/.env
 apps/backend/target
 arquivos_auxiliares/
+others/
 .local_pgdata/
 logs/
 .runtime/

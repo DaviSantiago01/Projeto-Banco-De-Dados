@@ -25,7 +25,7 @@ async function fazerRequisicao(caminho, opcoes = {}) {
   const corpo = tipoConteudo.includes('application/json') ? await resposta.json() : null;
 
   if (!resposta.ok) {
-    throw new Error(corpo?.message ?? 'Nao foi possivel concluir a operacao.');
+    throw new Error(corpo?.message ?? 'Não foi possível concluir a operação.');
   }
 
   return corpo;
@@ -39,12 +39,98 @@ export function buscarClientes(signal) {
   return fazerRequisicao('/clientes', { signal });
 }
 
+export function criarCliente(dados) {
+  return fazerRequisicao('/clientes', {
+    method: 'POST',
+    body: JSON.stringify(dados),
+  });
+}
+
+export function atualizarCliente(cpf, dados) {
+  return fazerRequisicao(`/clientes/${cpf}`, {
+    method: 'PUT',
+    body: JSON.stringify(dados),
+  });
+}
+
+export function excluirCliente(cpf) {
+  return fazerRequisicao(`/clientes/${cpf}`, {
+    method: 'DELETE',
+  });
+}
+
 export function buscarAtendentes(signal) {
   return fazerRequisicao('/atendentes', { signal });
 }
 
+export function buscarFornecedores(signal) {
+  return fazerRequisicao('/fornecedores', { signal });
+}
+
 export function buscarProdutos(signal) {
   return fazerRequisicao('/produtos', { signal });
+}
+
+export function buscarMelhorFornecedorProduto(codigo) {
+  return fazerRequisicao(`/produtos/${codigo}/melhor-fornecedor`);
+}
+
+export function atualizarPrecoProdutoProcedimento(codigo, novoPreco) {
+  return fazerRequisicao(`/produtos/${codigo}/atualizar-preco-procedimento`, {
+    method: 'POST',
+    body: JSON.stringify({ novoPreco }),
+  });
+}
+
+export function buscarLogsAlteracaoPreco(signal) {
+  return fazerRequisicao('/produtos/logs/alteracao-preco', { signal });
+}
+
+export function buscarConsultaAtendentesPorVendas(minimoVendas, signal) {
+  const parametros = new URLSearchParams({
+    minimoVendas: String(minimoVendas ?? 0),
+  });
+  return fazerRequisicao(`/relatorios/consulta-atendentes-por-vendas?${parametros.toString()}`, {
+    signal,
+  });
+}
+
+export function buscarConsultaClientesPorNome(nome, signal) {
+  const parametros = new URLSearchParams({
+    nome: nome || '%',
+  });
+  return fazerRequisicao(`/relatorios/consulta-clientes-por-nome?${parametros.toString()}`, {
+    signal,
+  });
+}
+
+export function buscarConsultaProdutosPorNome(nome, signal) {
+  const parametros = new URLSearchParams({
+    nome: nome || '',
+  });
+  return fazerRequisicao(`/relatorios/consulta-produtos-por-nome?${parametros.toString()}`, {
+    signal,
+  });
+}
+
+export function buscarConsultaProdutosSemVenda(signal) {
+  return fazerRequisicao('/relatorios/consulta-produtos-sem-venda', { signal });
+}
+
+export function buscarConsultaMelhorPrazoFornecedor(signal) {
+  return fazerRequisicao('/relatorios/consulta-melhor-prazo-fornecedor', { signal });
+}
+
+export function buscarViewVendasDetalhadas(signal) {
+  return fazerRequisicao('/relatorios/view-vendas-detalhadas', { signal });
+}
+
+export function buscarViewEstoqueCritico(signal) {
+  return fazerRequisicao('/relatorios/view-estoque-critico', { signal });
+}
+
+export function buscarViewProdutosMaisVendidos(signal) {
+  return fazerRequisicao('/relatorios/view-produtos-mais-vendidos', { signal });
 }
 
 export function criarProduto(dados) {
@@ -69,6 +155,26 @@ export function excluirProduto(codigo) {
 
 export function buscarVendas(signal) {
   return fazerRequisicao('/vendas', { signal });
+}
+
+export function criarFornecedor(dados) {
+  return fazerRequisicao('/fornecedores', {
+    method: 'POST',
+    body: JSON.stringify(dados),
+  });
+}
+
+export function atualizarFornecedor(cnpj, dados) {
+  return fazerRequisicao(`/fornecedores/${cnpj}`, {
+    method: 'PUT',
+    body: JSON.stringify(dados),
+  });
+}
+
+export function excluirFornecedor(cnpj) {
+  return fazerRequisicao(`/fornecedores/${cnpj}`, {
+    method: 'DELETE',
+  });
 }
 
 export function criarVenda(dados) {

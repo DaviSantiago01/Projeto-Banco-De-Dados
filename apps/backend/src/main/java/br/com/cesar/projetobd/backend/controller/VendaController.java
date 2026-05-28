@@ -2,7 +2,6 @@ package br.com.cesar.projetobd.backend.controller;
 
 import br.com.cesar.projetobd.backend.dao.VendaDao;
 import br.com.cesar.projetobd.backend.model.Venda;
-import jakarta.validation.Valid;
 import java.sql.SQLException;
 import java.util.List;
 import org.springframework.http.HttpStatus;
@@ -34,14 +33,14 @@ public class VendaController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Venda criar(@Valid @RequestBody Venda venda) throws SQLException {
+    public Venda criar(@RequestBody Venda venda) throws SQLException {
         return vendaDao.inserir(venda);
     }
 
     @PutMapping("/{numero}")
     public Venda atualizar(
         @PathVariable Integer numero,
-        @Valid @RequestBody Venda venda
+        @RequestBody Venda venda
     ) throws SQLException {
         // Usa o numero da URL para evitar divergencia com o corpo enviado pela tela.
         venda.setNumero(numero);

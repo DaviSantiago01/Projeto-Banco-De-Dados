@@ -1,176 +1,545 @@
 BEGIN;
 
-INSERT INTO funcionario (matricula, nome, data_nascimento, salario, turno, mat_supervisor)
-SELECT
-    'F' || LPAD(g::text, 3, '0'),
-    'Funcionario ' || LPAD(g::text, 2, '0'),
-    DATE '1980-01-01' + (g * 120),
-    ROUND((2200 + (g * 135.75))::NUMERIC, 2),
-    CASE MOD(g, 4)
-        WHEN 0 THEN 'MANHA'
-        WHEN 1 THEN 'TARDE'
-        WHEN 2 THEN 'NOITE'
-        ELSE 'INTEGRAL'
-    END,
-    CASE
-        WHEN g <= 10 THEN NULL
-        ELSE 'F' || LPAD((((g - 1) % 10) + 1)::text, 3, '0')
-    END
-FROM generate_series(1, 70) AS g;
+INSERT INTO funcionario (matricula, nome, data_nascimento, salario, turno, mat_supervisor) VALUES
+('F001', 'Ana Lucia Ferreira', '1978-02-14', 8200.00, 'INTEGRAL', NULL),
+('F002', 'Carlos Eduardo Nogueira', '1977-05-03', 8100.00, 'INTEGRAL', NULL),
+('F003', 'Marcia Helena Costa', '1980-08-19', 7950.00, 'INTEGRAL', NULL),
+('F004', 'Ricardo Alves Barros', '1979-11-27', 8050.00, 'INTEGRAL', NULL),
+('F005', 'Patricia Gomes Duarte', '1981-04-10', 7900.00, 'INTEGRAL', NULL),
+('F006', 'Joao Victor Siqueira', '1982-07-22', 7250.00, 'MANHA', 'F001'),
+('F007', 'Luciana Rocha Nunes', '1983-09-12', 7180.00, 'TARDE', 'F002'),
+('F008', 'Fernando Melo Tavares', '1984-03-18', 7320.00, 'NOITE', 'F003'),
+('F009', 'Bianca Ribeiro Campos', '1985-06-08', 7100.00, 'MANHA', 'F004'),
+('F010', 'Mateus Andrade Lima', '1986-12-01', 7050.00, 'TARDE', 'F005'),
+('F011', 'Renata Farias Moura', '1987-01-16', 6900.00, 'NOITE', 'F001'),
+('F012', 'Diego Henrique Pires', '1988-10-29', 6840.00, 'INTEGRAL', 'F002'),
+('F013', 'Larissa Bezerra Santos', '1989-02-21', 6760.00, 'MANHA', 'F003'),
+('F014', 'Bruno Cesar Monteiro', '1990-05-30', 6680.00, 'TARDE', 'F004'),
+('F015', 'Juliana Leal Correia', '1986-09-09', 6620.00, 'NOITE', 'F005'),
+('F016', 'Thiago Ramos Oliveira', '1987-03-06', 6550.00, 'INTEGRAL', 'F001'),
+('F017', 'Camila Freitas Castro', '1988-07-25', 6480.00, 'MANHA', 'F002'),
+('F018', 'Gustavo Nascimento Reis', '1989-12-14', 6400.00, 'TARDE', 'F003'),
+('F019', 'Priscila Araujo Teixeira', '1990-01-11', 6360.00, 'NOITE', 'F004'),
+('F020', 'Rafael Cavalcanti Moraes', '1985-04-02', 6300.00, 'INTEGRAL', 'F005'),
+('F021', 'Sabrina Holanda Martins', '1986-08-28', 6240.00, 'MANHA', 'F001'),
+('F022', 'Felipe Augusto Dantas', '1987-11-17', 6180.00, 'TARDE', 'F002'),
+('F023', 'Monica Cristina Vieira', '1988-06-13', 6120.00, 'NOITE', 'F003'),
+('F024', 'Leonardo Barros Pacheco', '1989-09-05', 6060.00, 'INTEGRAL', 'F004'),
+('F025', 'Tatiana Rocha Barbosa', '1990-02-24', 5980.00, 'MANHA', 'F005'),
+('F026', 'Caio Henrique Lopes', '1985-10-20', 5920.00, 'TARDE', 'F001'),
+('F027', 'Helena Duarte Gomes', '1986-03-31', 5860.00, 'NOITE', 'F002'),
+('F028', 'Vinicius Mendes Silva', '1987-07-04', 5800.00, 'INTEGRAL', 'F003'),
+('F029', 'Aline Cristina Cardoso', '1988-12-26', 5740.00, 'MANHA', 'F004'),
+('F030', 'Otavio Ribeiro Santana', '1989-05-15', 5680.00, 'TARDE', 'F005'),
+('F031', 'Mariana Alves Lima', '1993-01-08', 2860.00, 'MANHA', 'F006'),
+('F032', 'Roberto Carlos Mendes', '1992-04-16', 2940.00, 'TARDE', 'F007'),
+('F033', 'Fernanda Rocha Santos', '1994-03-19', 3020.00, 'NOITE', 'F008'),
+('F034', 'Lucas Henrique Barros', '1991-06-27', 3100.00, 'MANHA', 'F009'),
+('F035', 'Patricia Gomes Ferreira', '1990-08-03', 3180.00, 'TARDE', 'F010'),
+('F036', 'Joao Pedro Cavalcanti', '1993-10-12', 3260.00, 'NOITE', 'F006'),
+('F037', 'Camila Araujo Nunes', '1992-02-05', 3340.00, 'MANHA', 'F007'),
+('F038', 'Andre Luiz Monteiro', '1991-11-22', 3420.00, 'TARDE', 'F008'),
+('F039', 'Juliana Martins Costa', '1994-07-14', 3500.00, 'NOITE', 'F009'),
+('F040', 'Diego Souza Correia', '1990-09-01', 3580.00, 'MANHA', 'F010'),
+('F041', 'Renata Melo Duarte', '1993-12-09', 3660.00, 'TARDE', 'F011'),
+('F042', 'Bruno Felipe Andrade', '1992-05-21', 3740.00, 'NOITE', 'F012'),
+('F043', 'Larissa Bezerra Campos', '1991-08-29', 3820.00, 'MANHA', 'F013'),
+('F044', 'Gustavo Ramos Tavares', '1994-01-17', 3900.00, 'TARDE', 'F014'),
+('F045', 'Aline Cristina Moura', '1990-04-25', 3980.00, 'NOITE', 'F015'),
+('F046', 'Eduardo Vieira Lopes', '1993-06-06', 4060.00, 'MANHA', 'F016'),
+('F047', 'Bianca Carvalho Pires', '1992-09-30', 4140.00, 'TARDE', 'F017'),
+('F048', 'Rafael Matos Barbosa', '1991-12-11', 4220.00, 'NOITE', 'F018'),
+('F049', 'Tatiana Farias Oliveira', '1994-02-28', 4300.00, 'MANHA', 'F019'),
+('F050', 'Marcelo Nascimento Reis', '1990-07-18', 4380.00, 'TARDE', 'F020'),
+('F051', 'Isabela Fernandes Silva', '1993-03-03', 4460.00, 'NOITE', 'F021'),
+('F052', 'Caio Henrique Morais', '1992-10-15', 4540.00, 'MANHA', 'F022'),
+('F053', 'Sabrina Leal Batista', '1991-01-24', 4620.00, 'TARDE', 'F023'),
+('F054', 'Felipe Augusto Teixeira', '1994-05-12', 4700.00, 'NOITE', 'F024'),
+('F055', 'Monica Freitas Dantas', '1990-11-07', 4780.00, 'MANHA', 'F025'),
+('F056', 'Thiago Pacheco Martins', '1993-08-20', 4860.00, 'TARDE', 'F026'),
+('F057', 'Priscila Holanda Castro', '1992-12-02', 4940.00, 'NOITE', 'F027'),
+('F058', 'Vinicius Rocha Lima', '1991-04-13', 5020.00, 'MANHA', 'F028'),
+('F059', 'Helena Duarte Siqueira', '1994-06-23', 5100.00, 'TARDE', 'F029'),
+('F060', 'Otavio Ribeiro Gomes', '1990-10-31', 5180.00, 'NOITE', 'F030');
 
-INSERT INTO gerente (matricula, data_promocao, bonificacao)
-SELECT
-    'F' || LPAD(g::text, 3, '0'),
-    DATE '2021-01-01' + (g * 20),
-    ROUND((900 + (g * 85.50))::NUMERIC, 2)
-FROM generate_series(1, 30) AS g;
+INSERT INTO gerente (matricula, data_promocao, bonificacao) VALUES
+('F001', '2020-01-10', 1850.00),
+('F002', '2020-02-15', 1920.00),
+('F003', '2020-03-20', 1760.00),
+('F004', '2020-04-18', 2010.00),
+('F005', '2020-05-12', 1880.00),
+('F006', '2021-01-08', 1340.00),
+('F007', '2021-02-11', 1290.00),
+('F008', '2021-03-16', 1410.00),
+('F009', '2021-04-09', 1260.00),
+('F010', '2021-05-14', 1230.00),
+('F011', '2021-06-10', 1180.00),
+('F012', '2021-07-07', 1210.00),
+('F013', '2021-08-19', 1170.00),
+('F014', '2021-09-23', 1150.00),
+('F015', '2021-10-05', 1120.00),
+('F016', '2022-01-11', 1080.00),
+('F017', '2022-02-03', 1050.00),
+('F018', '2022-03-17', 1030.00),
+('F019', '2022-04-26', 1010.00),
+('F020', '2022-05-30', 990.00),
+('F021', '2022-06-14', 960.00),
+('F022', '2022-07-22', 940.00),
+('F023', '2022-08-18', 920.00),
+('F024', '2022-09-29', 900.00),
+('F025', '2022-10-20', 880.00),
+('F026', '2023-01-12', 860.00),
+('F027', '2023-02-08', 840.00),
+('F028', '2023-03-09', 820.00),
+('F029', '2023-04-13', 800.00),
+('F030', '2023-05-11', 780.00);
 
-INSERT INTO atendente (matricula, setor)
-SELECT
-    'F' || LPAD((g + 30)::text, 3, '0'),
-    CASE MOD(g, 5)
-        WHEN 0 THEN 'Hidraulica'
-        WHEN 1 THEN 'Eletrica'
-        WHEN 2 THEN 'Acabamento'
-        WHEN 3 THEN 'Ferragens'
-        ELSE 'Tintas'
-    END
-FROM generate_series(1, 30) AS g;
+INSERT INTO atendente (matricula, setor) VALUES
+('F031', 'Ferragens'),
+('F032', 'Ferramentas'),
+('F033', 'Ferramentas'),
+('F034', 'Pintura'),
+('F035', 'Ferramentas Eletricas'),
+('F036', 'Tintas'),
+('F037', 'Pintura'),
+('F038', 'Preparacao de Parede'),
+('F039', 'Hidraulica'),
+('F040', 'Hidraulica'),
+('F041', 'Hidraulica'),
+('F042', 'Hidraulica'),
+('F043', 'Eletrica'),
+('F044', 'Eletrica'),
+('F045', 'Eletrica'),
+('F046', 'Eletrica'),
+('F047', 'Cimentos'),
+('F048', 'Agregados'),
+('F049', 'Agregados'),
+('F050', 'Argamassas'),
+('F051', 'Revestimentos'),
+('F052', 'Acabamentos'),
+('F053', 'Portas e Fechaduras'),
+('F054', 'Portas e Fechaduras'),
+('F055', 'Fixacao'),
+('F056', 'Fixacao'),
+('F057', 'Utilidades'),
+('F058', 'Reservatorios'),
+('F059', 'Loucas Sanitarias'),
+('F060', 'Metais Sanitarios');
 
-INSERT INTO dependente (nome, matricula_funcionario)
-SELECT
-    'Dependente ' || LPAD(g::text, 2, '0'),
-    'F' || LPAD(g::text, 3, '0')
-FROM generate_series(1, 30) AS g;
+INSERT INTO dependente (nome, matricula_funcionario) VALUES
+('Clara Ferreira', 'F001'),
+('Pedro Nogueira', 'F002'),
+('Helena Costa', 'F003'),
+('Miguel Barros', 'F004'),
+('Laura Duarte', 'F005'),
+('Sofia Siqueira', 'F006'),
+('Davi Nunes', 'F007'),
+('Alice Tavares', 'F008'),
+('Lucas Campos', 'F009'),
+('Valentina Lima', 'F010'),
+('Arthur Moura', 'F011'),
+('Manuela Pires', 'F012'),
+('Theo Santos', 'F013'),
+('Isis Monteiro', 'F014'),
+('Gael Correia', 'F015'),
+('Liz Oliveira', 'F016'),
+('Benjamin Castro', 'F017'),
+('Livia Reis', 'F018'),
+('Nicolas Teixeira', 'F019'),
+('Maya Moraes', 'F020'),
+('Samuel Martins', 'F021'),
+('Cecilia Dantas', 'F022'),
+('Ravi Vieira', 'F023'),
+('Ester Pacheco', 'F024'),
+('Noah Barbosa', 'F025'),
+('Melissa Lopes', 'F026'),
+('Heitor Cardoso', 'F027'),
+('Agatha Gomes', 'F028'),
+('Enzo Santana', 'F029'),
+('Antonella Silva', 'F030');
 
-INSERT INTO cliente (cpf, nome, email, cep, rua, numero, bairro)
-SELECT
-    LPAD(g::text, 11, '0'),
-    'Cliente ' || LPAD(g::text, 2, '0'),
-    'cliente' || g || '@lojamateriais.com',
-    LPAD((50000000 + g)::text, 8, '0'),
-    'Rua dos Clientes',
-    g::text,
-    'Bairro ' || LPAD((((g - 1) % 10) + 1)::text, 2, '0')
-FROM generate_series(1, 30) AS g;
+INSERT INTO cliente (cpf, nome, email, cep, rua, numero, bairro) VALUES
+('70000000001', 'Mariana Alves Lima', 'mariana.lima@email.com', '52011010', 'Rua da Aurora', '125', 'Boa Vista'),
+('70000000002', 'Roberto Carlos Mendes', 'roberto.mendes@email.com', '50720120', 'Avenida Caxanga', '2140', 'Madalena'),
+('70000000003', 'Fernanda Rocha Santos', 'fernanda.rocha@email.com', '51020000', 'Rua Ribeiro de Brito', '88', 'Boa Viagem'),
+('70000000004', 'Lucas Henrique Barros', 'lucas.barros@email.com', '50670000', 'Rua Jose Osorio', '742', 'Torre'),
+('70000000005', 'Patricia Gomes Ferreira', 'patricia.ferreira@email.com', '52050000', 'Rua Conselheiro Portela', '301', 'Espinheiro'),
+('70000000006', 'Joao Pedro Cavalcanti', 'joao.cavalcanti@email.com', '50050060', 'Rua do Riachuelo', '56', 'Santo Amaro'),
+('70000000007', 'Camila Araujo Nunes', 'camila.nunes@email.com', '50741020', 'Rua Benfica', '910', 'Madalena'),
+('70000000008', 'Andre Luiz Monteiro', 'andre.monteiro@email.com', '51130000', 'Avenida Boa Viagem', '3440', 'Boa Viagem'),
+('70000000009', 'Juliana Martins Costa', 'juliana.costa@email.com', '52060010', 'Rua das Creoulas', '177', 'Gracas'),
+('70000000010', 'Diego Souza Correia', 'diego.correia@email.com', '50751010', 'Rua Real da Torre', '640', 'Torre'),
+('70000000011', 'Renata Melo Duarte', 'renata.duarte@email.com', '50870000', 'Rua Padre Roma', '225', 'Parnamirim'),
+('70000000012', 'Bruno Felipe Andrade', 'bruno.andrade@email.com', '52041000', 'Rua Amaro Bezerra', '412', 'Derby'),
+('70000000013', 'Larissa Bezerra Campos', 'larissa.campos@email.com', '50610000', 'Avenida Beira Rio', '984', 'Ilha do Retiro'),
+('70000000014', 'Gustavo Ramos Tavares', 'gustavo.tavares@email.com', '51011000', 'Rua dos Navegantes', '150', 'Boa Viagem'),
+('70000000015', 'Aline Cristina Moura', 'aline.moura@email.com', '52070020', 'Rua do Futuro', '631', 'Aflitos'),
+('70000000016', 'Eduardo Vieira Lopes', 'eduardo.lopes@email.com', '50070030', 'Rua do Hospicio', '209', 'Boa Vista'),
+('70000000017', 'Bianca Carvalho Pires', 'bianca.pires@email.com', '50711100', 'Rua Jose de Holanda', '718', 'Torre'),
+('70000000018', 'Rafael Matos Barbosa', 'rafael.barbosa@email.com', '51030110', 'Rua Setubal', '65', 'Boa Viagem'),
+('70000000019', 'Tatiana Farias Oliveira', 'tatiana.oliveira@email.com', '52031120', 'Rua Jacobina', '530', 'Gracas'),
+('70000000020', 'Marcelo Nascimento Reis', 'marcelo.reis@email.com', '50810000', 'Estrada do Arraial', '1290', 'Casa Amarela'),
+('70000000021', 'Isabela Fernandes Silva', 'isabela.silva@email.com', '50630000', 'Rua Benfica', '141', 'Madalena'),
+('70000000022', 'Caio Henrique Morais', 'caio.morais@email.com', '51111020', 'Rua Padre Carapuceiro', '777', 'Boa Viagem'),
+('70000000023', 'Sabrina Leal Batista', 'sabrina.batista@email.com', '52020020', 'Rua Gervasio Pires', '84', 'Santo Amaro'),
+('70000000024', 'Felipe Augusto Teixeira', 'felipe.teixeira@email.com', '50730040', 'Rua Visconde de Albuquerque', '604', 'Madalena'),
+('70000000025', 'Monica Freitas Dantas', 'monica.dantas@email.com', '51021120', 'Rua dos Navegantes', '238', 'Boa Viagem'),
+('70000000026', 'Thiago Pacheco Martins', 'thiago.martins@email.com', '52061030', 'Rua da Hora', '19', 'Espinheiro'),
+('70000000027', 'Priscila Holanda Castro', 'priscila.castro@email.com', '50090000', 'Rua Imperial', '1099', 'Sao Jose'),
+('70000000028', 'Vinicius Rocha Lima', 'vinicius.lima@email.com', '50680130', 'Rua Joao Ivo da Silva', '301', 'Torre'),
+('70000000029', 'Helena Duarte Siqueira', 'helena.siqueira@email.com', '51170000', 'Avenida Conselheiro Aguiar', '2020', 'Boa Viagem'),
+('70000000030', 'Otavio Ribeiro Gomes', 'otavio.gomes@email.com', '52080040', 'Rua Desembargador Goes Cavalcanti', '515', 'Parnamirim');
 
-INSERT INTO telefone_cliente (cpf_cliente, telefone)
-SELECT
-    LPAD(g::text, 11, '0'),
-    '81' || LPAD((900000000 + g)::text, 9, '0')
-FROM generate_series(1, 30) AS g;
+INSERT INTO telefone_cliente (cpf_cliente, telefone) VALUES
+('70000000001', '81990000001'),
+('70000000002', '81990000002'),
+('70000000003', '81990000003'),
+('70000000004', '81990000004'),
+('70000000005', '81990000005'),
+('70000000006', '81990000006'),
+('70000000007', '81990000007'),
+('70000000008', '81990000008'),
+('70000000009', '81990000009'),
+('70000000010', '81990000010'),
+('70000000011', '81990000011'),
+('70000000012', '81990000012'),
+('70000000013', '81990000013'),
+('70000000014', '81990000014'),
+('70000000015', '81990000015'),
+('70000000016', '81990000016'),
+('70000000017', '81990000017'),
+('70000000018', '81990000018'),
+('70000000019', '81990000019'),
+('70000000020', '81990000020'),
+('70000000021', '81990000021'),
+('70000000022', '81990000022'),
+('70000000023', '81990000023'),
+('70000000024', '81990000024'),
+('70000000025', '81990000025'),
+('70000000026', '81990000026'),
+('70000000027', '81990000027'),
+('70000000028', '81990000028'),
+('70000000029', '81990000029'),
+('70000000030', '81990000030');
 
-INSERT INTO categoria (codigo, nome, descricao)
-SELECT
-    'CAT' || LPAD(g::text, 3, '0'),
-    'Categoria ' || LPAD(g::text, 2, '0'),
-    'Descricao da categoria ' || g
-FROM generate_series(1, 30) AS g;
+INSERT INTO categoria (codigo, nome, descricao) VALUES
+('CAT001', 'Ferramentas de Impacto', 'Martelos e ferramentas de impacto para obra'),
+('CAT002', 'Chaves e Aperto', 'Chaves manuais e itens para aperto e manutencao'),
+('CAT003', 'Alicates', 'Alicates para corte, pressao e manutencao'),
+('CAT004', 'Serras', 'Serras e acessorios para corte manual'),
+('CAT005', 'Furadeiras', 'Equipamentos eletricos para perfuracao'),
+('CAT006', 'Tintas', 'Tintas para pintura interna e externa'),
+('CAT007', 'Acessorios de Pintura', 'Rolos, pinceis e bandejas para pintura'),
+('CAT008', 'Preparacao de Parede', 'Massas e itens para nivelamento de superficies'),
+('CAT009', 'Tubos Hidraulicos', 'Tubos para instalacoes hidraulicas'),
+('CAT010', 'Conexoes Hidraulicas', 'Conexoes para mudanca e distribuicao de fluxo'),
+('CAT011', 'Registros', 'Registros e controles de passagem de agua'),
+('CAT012', 'Drenagem', 'Caixas sifonadas e escoamento'),
+('CAT013', 'Cabos Eletricos', 'Cabos e fios para instalacoes eletricas'),
+('CAT014', 'Tomadas', 'Tomadas e espelhos para ambientes internos'),
+('CAT015', 'Protecao Eletrica', 'Disjuntores e protecoes de circuito'),
+('CAT016', 'Interruptores', 'Interruptores para instalacoes residenciais'),
+('CAT017', 'Cimentos', 'Cimentos para obra civil'),
+('CAT018', 'Areias', 'Areias para contrapiso, concreto e assentamento'),
+('CAT019', 'Britas', 'Britas para concreto e drenagem'),
+('CAT020', 'Argamassas', 'Argamassas colantes e de assentamento'),
+('CAT021', 'Pisos Ceramicos', 'Pisos para ambientes residenciais'),
+('CAT022', 'Rejuntes', 'Rejuntes e acabamentos para revestimentos'),
+('CAT023', 'Fechaduras', 'Fechaduras para portas internas e externas'),
+('CAT024', 'Dobradicas', 'Dobradicas e ferragens para portas'),
+('CAT025', 'Parafusos', 'Parafusos e fixadores em caixa'),
+('CAT026', 'Buchas', 'Buchas de nylon e itens de fixacao'),
+('CAT027', 'Escadas', 'Escadas residenciais e profissionais'),
+('CAT028', 'Reservatorios', 'Caixas d agua e itens de armazenamento'),
+('CAT029', 'Loucas Sanitarias', 'Vasos e loucas para banheiro'),
+('CAT030', 'Metais Sanitarios', 'Torneiras e metais para cozinha e banheiro');
 
-INSERT INTO produto (codigo, nome, preco, descricao, unidade_medida, cod_categoria)
-SELECT
-    'PROD' || LPAD(g::text, 3, '0'),
-    'Produto ' || LPAD(g::text, 2, '0'),
-    ROUND((12.50 + (g * 4.35))::NUMERIC, 2),
-    'Descricao do produto ' || g,
-    CASE MOD(g, 5)
-        WHEN 0 THEN 'UN'
-        WHEN 1 THEN 'KG'
-        WHEN 2 THEN 'M'
-        WHEN 3 THEN 'L'
-        ELSE 'CX'
-    END,
-    'CAT' || LPAD(g::text, 3, '0')
-FROM generate_series(1, 30) AS g;
+INSERT INTO produto (codigo, nome, preco, descricao, unidade_medida, cod_categoria) VALUES
+('PROD001', 'Martelo de Unha 27mm', 34.90, 'Martelo de aco com cabo emborrachado para servicos de fixacao e ajuste', 'UN', 'CAT001'),
+('PROD002', 'Chave de Fenda Phillips 3/16', 12.50, 'Chave manual com ponta Phillips para montagem e manutencao', 'UN', 'CAT002'),
+('PROD003', 'Alicate Universal 8 Pol', 39.90, 'Alicate universal isolado para corte e aperto em servicos gerais', 'UN', 'CAT003'),
+('PROD004', 'Serra Manual 18 Pol', 28.90, 'Arco de serra manual com lamina para cortes em metal e PVC', 'UN', 'CAT004'),
+('PROD005', 'Furadeira de Impacto 650W', 229.90, 'Furadeira eletrica com impacto para alvenaria, madeira e metal', 'UN', 'CAT005'),
+('PROD006', 'Tinta Acrilica Branca 18L', 189.90, 'Tinta acrilica fosca branca para paredes internas e externas', 'L', 'CAT006'),
+('PROD007', 'Rolo de Pintura Antigota 23cm', 24.90, 'Rolo de la sintetica para acabamento em paredes lisas', 'UN', 'CAT007'),
+('PROD008', 'Massa Corrida PVA 25kg', 62.90, 'Massa para nivelamento de paredes internas antes da pintura', 'KG', 'CAT008'),
+('PROD009', 'Tubo PVC Soldavel 50mm', 38.90, 'Tubo PVC soldavel para instalacoes hidraulicas residenciais', 'M', 'CAT009'),
+('PROD010', 'Joelho PVC 90 Graus 50mm', 7.50, 'Conexao PVC soldavel para mudanca de direcao em tubulacoes', 'UN', 'CAT010'),
+('PROD011', 'Registro de Gaveta 3/4', 44.90, 'Registro metalico para controle de fluxo de agua', 'UN', 'CAT011'),
+('PROD012', 'Caixa Sifonada 150mm', 32.90, 'Caixa sifonada em PVC para banheiros e areas molhadas', 'UN', 'CAT012'),
+('PROD013', 'Cabo Flexivel 2.5mm 100m', 169.90, 'Rolo de cabo flexivel antichama para circuitos residenciais', 'M', 'CAT013'),
+('PROD014', 'Tomada Dupla 10A', 18.90, 'Tomada dupla branca 10A para instalacao embutida', 'UN', 'CAT014'),
+('PROD015', 'Disjuntor Monopolar 20A', 16.90, 'Disjuntor monopolar para protecao de circuito eletrico', 'UN', 'CAT015'),
+('PROD016', 'Interruptor Simples 10A', 12.90, 'Interruptor simples branco para instalacao residencial', 'UN', 'CAT016'),
+('PROD017', 'Cimento CP II 50kg', 39.90, 'Saco de cimento CP II indicado para uso geral em construcao', 'KG', 'CAT017'),
+('PROD018', 'Areia Lavada Media', 129.90, 'Areia lavada media para concreto, contrapiso e assentamento', 'M', 'CAT018'),
+('PROD019', 'Brita 1 para Concreto', 149.90, 'Brita numero 1 indicada para concreto estrutural e drenagem', 'M', 'CAT019'),
+('PROD020', 'Argamassa AC1 20kg', 24.90, 'Argamassa colante AC1 para assentamento de ceramicas internas', 'KG', 'CAT020'),
+('PROD021', 'Piso Ceramico Bege 45x45', 34.90, 'Piso ceramico bege para ambientes internos residenciais', 'M', 'CAT021'),
+('PROD022', 'Rejunte Cinza 1kg', 8.90, 'Rejunte cimenticio cinza para acabamento entre pecas ceramicas', 'KG', 'CAT022'),
+('PROD023', 'Fechadura Externa Cromada', 89.90, 'Fechadura externa cromada com chave e macaneta', 'UN', 'CAT023'),
+('PROD024', 'Dobradica 3 Pol Aco Zincado', 6.90, 'Dobradica zincada para portas de madeira internas', 'UN', 'CAT024'),
+('PROD025', 'Parafuso Sextavado 1/4 100un', 19.90, 'Caixa com parafusos sextavados para fixacao em estruturas leves', 'CX', 'CAT025'),
+('PROD026', 'Bucha Nylon 8mm 100un', 14.90, 'Pacote com buchas de nylon para fixacao em alvenaria', 'CX', 'CAT026'),
+('PROD027', 'Escada Aluminio 6 Degraus', 219.90, 'Escada em aluminio com seis degraus antiderrapantes', 'UN', 'CAT027'),
+('PROD028', 'Caixa d Agua 500L', 289.90, 'Reservatorio de polietileno com tampa para armazenamento de agua', 'UN', 'CAT028'),
+('PROD029', 'Vaso Sanitario Convencional', 199.90, 'Vaso sanitario branco convencional para banheiro residencial', 'UN', 'CAT029'),
+('PROD030', 'Torneira Metalica de Parede', 59.90, 'Torneira metalica cromada para pia ou tanque', 'UN', 'CAT030');
 
-INSERT INTO estoque (cod_produto, quantidade, quantidade_minima, data_ultima_atualizacao)
-SELECT
-    'PROD' || LPAD(g::text, 3, '0'),
-    40 + (g * 3),
-    5 + MOD(g, 8),
-    CURRENT_DATE - g
-FROM generate_series(1, 30) AS g;
+INSERT INTO estoque (cod_produto, quantidade, quantidade_minima, data_ultima_atualizacao) VALUES
+('PROD001', 32, 10, CURRENT_DATE),
+('PROD002', 40, 12, CURRENT_DATE),
+('PROD003', 26, 10, CURRENT_DATE),
+('PROD004', 18, 8, CURRENT_DATE),
+('PROD005', 3, 5, CURRENT_DATE),
+('PROD006', 22, 8, CURRENT_DATE),
+('PROD007', 31, 10, CURRENT_DATE),
+('PROD008', 16, 7, CURRENT_DATE),
+('PROD009', 44, 14, CURRENT_DATE),
+('PROD010', 60, 18, CURRENT_DATE),
+('PROD011', 19, 8, CURRENT_DATE),
+('PROD012', 21, 9, CURRENT_DATE),
+('PROD013', 14, 6, CURRENT_DATE),
+('PROD014', 38, 12, CURRENT_DATE),
+('PROD015', 42, 14, CURRENT_DATE),
+('PROD016', 35, 10, CURRENT_DATE),
+('PROD017', 55, 20, CURRENT_DATE),
+('PROD018', 4, 6, CURRENT_DATE),
+('PROD019', 10, 5, CURRENT_DATE),
+('PROD020', 48, 16, CURRENT_DATE),
+('PROD021', 75, 25, CURRENT_DATE),
+('PROD022', 66, 18, CURRENT_DATE),
+('PROD023', 17, 6, CURRENT_DATE),
+('PROD024', 52, 15, CURRENT_DATE),
+('PROD025', 58, 17, CURRENT_DATE),
+('PROD026', 63, 20, CURRENT_DATE),
+('PROD027', 9, 4, CURRENT_DATE),
+('PROD028', 2, 3, CURRENT_DATE),
+('PROD029', 2, 4, CURRENT_DATE),
+('PROD030', 24, 8, CURRENT_DATE);
 
-INSERT INTO fornecedor (cnpj, nome, email, cep, rua, numero, bairro)
-SELECT
-    '1' || LPAD(g::text, 13, '0'),
-    'Fornecedor ' || LPAD(g::text, 2, '0'),
-    'fornecedor' || g || '@lojamateriais.com',
-    LPAD((60000000 + g)::text, 8, '0'),
-    'Rua dos Fornecedores',
-    g::text,
-    'Distrito ' || LPAD((((g - 1) % 10) + 1)::text, 2, '0')
-FROM generate_series(1, 30) AS g;
+INSERT INTO fornecedor (cnpj, nome, email, cep, rua, numero, bairro) VALUES
+('91000000000001', 'Distribuidora Nordeste Cimento', 'vendas@nordestecimento.com', '54310000', 'Avenida Sul', '1500', 'Imbiribeira'),
+('91000000000002', 'Ferreira Ferragens Atacado', 'comercial@ferreiraferragens.com', '50090010', 'Rua Imperial', '980', 'Sao Jose'),
+('91000000000003', 'Recife Tintas e Revestimentos', 'pedidos@recifetintas.com', '52041020', 'Rua Joaquim Nabuco', '412', 'Derby'),
+('91000000000004', 'HidroMais Tubos e Conexoes', 'atendimento@hidromais.com', '50750000', 'Rua Real da Torre', '880', 'Torre'),
+('91000000000005', 'EletroLuz Materiais Eletricos', 'orcamento@eletroluz.com', '50050040', 'Rua da Palma', '245', 'Santo Antonio'),
+('91000000000006', 'Construmix Argamassas', 'vendas@construmix.com', '54350000', 'Rua Arquiteto Luiz Nunes', '321', 'Imbiribeira'),
+('91000000000007', 'Madeireira Boa Obra', 'contato@boaobra.com', '50870010', 'Estrada do Arraial', '1450', 'Casa Amarela'),
+('91000000000008', 'Mega Acabamentos Recife', 'comercial@megaacabamentos.com', '51020020', 'Rua Ribeiro de Brito', '175', 'Boa Viagem'),
+('91000000000009', 'Casa do Encanador PE', 'pedidos@casadoencanador.com', '52031010', 'Rua das Pernambucanas', '64', 'Gracas'),
+('91000000000010', 'Parafusos Recife Atacado', 'vendas@parafusosrecife.com', '50070020', 'Rua do Hospicio', '330', 'Boa Vista'),
+('91000000000011', 'Obra Segura EPI', 'atendimento@obrasegura.com', '52051000', 'Rua Conselheiro Portela', '800', 'Espinheiro'),
+('91000000000012', 'Litoral Pisos e Ceramicas', 'vendas@litoralpisos.com', '51011030', 'Rua dos Navegantes', '390', 'Boa Viagem'),
+('91000000000013', 'Central da Ferramenta', 'comercial@centralferramenta.com', '50060000', 'Avenida Conde da Boa Vista', '720', 'Boa Vista'),
+('91000000000014', 'Pernambuco Metais Sanitarios', 'pedidos@pernambucometais.com', '51111000', 'Rua Padre Carapuceiro', '1050', 'Boa Viagem'),
+('91000000000015', 'Armazem da Construcao', 'contato@armazemconstrucao.com', '50630010', 'Rua Benfica', '228', 'Madalena'),
+('91000000000016', 'Fornecedor Rocha Materiais', 'vendas@rochamateriais.com', '52020050', 'Rua Gervasio Pires', '120', 'Santo Amaro'),
+('91000000000017', 'Nacional Telhas e Coberturas', 'orcamento@nacionaltelhas.com', '50810020', 'Estrada do Encanamento', '990', 'Casa Forte'),
+('91000000000018', 'Impermeabiliza Recife', 'comercial@impermeabilizarecife.com', '52060040', 'Rua da Hora', '260', 'Espinheiro'),
+('91000000000019', 'MultiObra Distribuidora', 'pedidos@multiobra.com', '50730030', 'Rua Visconde de Albuquerque', '560', 'Madalena'),
+('91000000000020', 'Agreste Materiais de Base', 'vendas@agrestemateriais.com', '55002000', 'Avenida Agamenon Magalhaes', '1800', 'Mauricio de Nassau'),
+('91000000000021', 'Forte Fixadores', 'comercial@fortefixadores.com', '50030120', 'Rua do Bom Jesus', '35', 'Recife Antigo'),
+('91000000000022', 'Lima Loucas Sanitarias', 'atendimento@limaloucas.com', '51030100', 'Rua Setubal', '85', 'Boa Viagem'),
+('91000000000023', 'Revest Norte Nordeste', 'vendas@revestnn.com', '52171000', 'Avenida Norte', '3100', 'Rosarinho'),
+('91000000000024', 'Jardim e Obra Comercio', 'pedidos@jardimeobra.com', '52080010', 'Rua Desembargador Goes Cavalcanti', '410', 'Parnamirim'),
+('91000000000025', 'Construtora Suprimentos PE', 'contato@suprimentospe.com', '50720140', 'Avenida Caxanga', '2990', 'Iputinga'),
+('91000000000026', 'Alpha Iluminacao Tecnica', 'comercial@alphailuminacao.com', '50050020', 'Rua Nova', '189', 'Santo Antonio'),
+('91000000000027', 'Organiza Obra Utilidades', 'vendas@organizaobra.com', '51170030', 'Avenida Conselheiro Aguiar', '2210', 'Boa Viagem'),
+('91000000000028', 'LimpaObra Distribuidora', 'pedidos@limpaobra.com', '50680100', 'Rua Joao Ivo da Silva', '515', 'Torre'),
+('91000000000029', 'Reservatorios Recife', 'atendimento@reservatoriosrecife.com', '54330000', 'Rua Jangadeiro', '77', 'Imbiribeira'),
+('91000000000030', 'Construfacil Atacado', 'vendas@construfacil.com', '52070050', 'Rua do Futuro', '1010', 'Aflitos');
 
-INSERT INTO telefone_fornecedor (cnpj_fornecedor, telefone)
-SELECT
-    '1' || LPAD(g::text, 13, '0'),
-    '81' || LPAD((910000000 + g)::text, 9, '0')
-FROM generate_series(1, 30) AS g;
+INSERT INTO telefone_fornecedor (cnpj_fornecedor, telefone) VALUES
+('91000000000001', '8133000001'),
+('91000000000002', '8133000002'),
+('91000000000003', '8133000003'),
+('91000000000004', '8133000004'),
+('91000000000005', '8133000005'),
+('91000000000006', '8133000006'),
+('91000000000007', '8133000007'),
+('91000000000008', '8133000008'),
+('91000000000009', '8133000009'),
+('91000000000010', '8133000010'),
+('91000000000011', '8133000011'),
+('91000000000012', '8133000012'),
+('91000000000013', '8133000013'),
+('91000000000014', '8133000014'),
+('91000000000015', '8133000015'),
+('91000000000016', '8133000016'),
+('91000000000017', '8133000017'),
+('91000000000018', '8133000018'),
+('91000000000019', '8133000019'),
+('91000000000020', '8133000020'),
+('91000000000021', '8133000021'),
+('91000000000022', '8133000022'),
+('91000000000023', '8133000023'),
+('91000000000024', '8133000024'),
+('91000000000025', '8133000025'),
+('91000000000026', '8133000026'),
+('91000000000027', '8133000027'),
+('91000000000028', '8133000028'),
+('91000000000029', '8133000029'),
+('91000000000030', '8133000030');
 
-INSERT INTO fornece (fk_fornecedor_cnpj, fk_produto_codigo, prazo_entrega, preco_fornecedor)
-SELECT
-    '1' || LPAD(g::text, 13, '0'),
-    'PROD' || LPAD(g::text, 3, '0'),
-    2 + MOD(g, 7),
-    ROUND(((12.50 + (g * 4.35)) * 0.78)::NUMERIC, 2)
-FROM generate_series(1, 30) AS g;
+INSERT INTO fornece (fk_fornecedor_cnpj, fk_produto_codigo, prazo_entrega, preco_fornecedor) VALUES
+('91000000000013', 'PROD001', 3, 24.50),
+('91000000000013', 'PROD002', 3, 8.40),
+('91000000000013', 'PROD003', 4, 27.20),
+('91000000000015', 'PROD004', 4, 19.50),
+('91000000000013', 'PROD005', 5, 178.00),
+('91000000000003', 'PROD006', 3, 142.00),
+('91000000000003', 'PROD007', 2, 16.80),
+('91000000000003', 'PROD008', 3, 44.50),
+('91000000000004', 'PROD009', 4, 28.60),
+('91000000000004', 'PROD010', 4, 4.20),
+('91000000000009', 'PROD011', 5, 31.50),
+('91000000000009', 'PROD012', 4, 22.00),
+('91000000000005', 'PROD013', 4, 124.00),
+('91000000000005', 'PROD014', 3, 12.60),
+('91000000000005', 'PROD015', 3, 11.10),
+('91000000000005', 'PROD016', 3, 8.40),
+('91000000000001', 'PROD017', 5, 29.50),
+('91000000000020', 'PROD018', 2, 92.00),
+('91000000000020', 'PROD019', 2, 104.00),
+('91000000000006', 'PROD020', 3, 17.30),
+('91000000000012', 'PROD021', 6, 24.80),
+('91000000000008', 'PROD022', 3, 5.70),
+('91000000000007', 'PROD023', 5, 62.00),
+('91000000000007', 'PROD024', 4, 4.10),
+('91000000000021', 'PROD025', 3, 13.20),
+('91000000000021', 'PROD026', 3, 9.80),
+('91000000000027', 'PROD027', 6, 164.00),
+('91000000000029', 'PROD028', 7, 216.00),
+('91000000000022', 'PROD029', 6, 148.00),
+('91000000000014', 'PROD030', 4, 39.50);
 
-INSERT INTO transportadora (cnpj, nome, telefone, email)
-SELECT
-    '8' || LPAD(g::text, 13, '0'),
-    'Transportadora ' || LPAD(g::text, 2, '0'),
-    '81' || LPAD((920000000 + g)::text, 9, '0'),
-    'transportadora' || g || '@logistica.com'
-FROM generate_series(1, 30) AS g;
+INSERT INTO transportadora (cnpj, nome, telefone, email) VALUES
+('92000000000001', 'Expressa Recife Cargas', '8141000001', 'operacao@expressarecife.com'),
+('92000000000002', 'Log Nordeste Entregas', '8141000002', 'contato@lognordeste.com'),
+('92000000000003', 'Rota Sul Transportes', '8141000003', 'coleta@rotasul.com'),
+('92000000000004', 'Via Forte Logistica', '8141000004', 'atendimento@viaforte.com'),
+('92000000000005', 'Agil Fretes Urbanos', '8141000005', 'fretes@agilfretes.com'),
+('92000000000006', 'Pernambuco Cargo', '8141000006', 'operacao@pecargo.com'),
+('92000000000007', 'Boa Viagem Entregas', '8141000007', 'contato@boaviagementregas.com'),
+('92000000000008', 'Recife Log Express', '8141000008', 'comercial@recifelog.com'),
+('92000000000009', 'Transporte Ponto Norte', '8141000009', 'atendimento@pontonorte.com'),
+('92000000000010', 'Caxanga Cargas Rapidas', '8141000010', 'fretes@caxangacargas.com'),
+('92000000000011', 'Rota Capibaribe Logistica', '8141000011', 'operacao@rotacapibaribe.com'),
+('92000000000012', 'Brasil Obra Transportes', '8141000012', 'contato@brasilobra.com'),
+('92000000000013', 'Delta Entregas Recife', '8141000013', 'comercial@deltaentregas.com'),
+('92000000000014', 'Uniao Cargas PE', '8141000014', 'operacao@uniaocargaspe.com'),
+('92000000000015', 'Mais Frete Nordeste', '8141000015', 'atendimento@maisfrete.com'),
+('92000000000016', 'Pronta Entrega Materiais', '8141000016', 'logistica@prontaentrega.com'),
+('92000000000017', 'Armazem Log Recife', '8141000017', 'contato@armazemlog.com'),
+('92000000000018', 'Transportes Ilha do Retiro', '8141000018', 'coleta@ilhafretes.com'),
+('92000000000019', 'Frota Forte Recife', '8141000019', 'operacao@frotaforte.com'),
+('92000000000020', 'Agreste Express', '8141000020', 'atendimento@agresteexpress.com'),
+('92000000000021', 'Litoral Cargas', '8141000021', 'comercial@litoralcargas.com'),
+('92000000000022', 'Pajeu Logistica Urbana', '8141000022', 'contato@pajeulog.com'),
+('92000000000023', 'Rota Boa Obra', '8141000023', 'fretes@rotaboaobra.com'),
+('92000000000024', 'TransConstrucao PE', '8141000024', 'operacao@transconstrucao.com'),
+('92000000000025', 'Frete Certo Recife', '8141000025', 'contato@fretecerto.com'),
+('92000000000026', 'Norte Sul Entregas', '8141000026', 'atendimento@nortesulentregas.com'),
+('92000000000027', 'Movimenta Obra Log', '8141000027', 'comercial@movimentaobra.com'),
+('92000000000028', 'Portal Cargas Recife', '8141000028', 'operacao@portalcargas.com'),
+('92000000000029', 'Rota Segura Transportes', '8141000029', 'contato@rotasegura.com'),
+('92000000000030', 'Entrega Forte Nordeste', '8141000030', 'fretes@entregaforte.com');
 
-INSERT INTO venda (data_hora, valor_total, forma_pagamento, cpf_cliente, mat_atendente)
-SELECT
-    CURRENT_TIMESTAMP - ((g * 2) || ' days')::INTERVAL,
-    ROUND((80 + (g * 19.90))::NUMERIC, 2),
-    CASE MOD(g, 5)
-        WHEN 0 THEN 'DINHEIRO'
-        WHEN 1 THEN 'CARTAO_CREDITO'
-        WHEN 2 THEN 'CARTAO_DEBITO'
-        WHEN 3 THEN 'PIX'
-        ELSE 'BOLETO'
-    END,
-    LPAD(g::text, 11, '0'),
-    'F' || LPAD((g + 30)::text, 3, '0')
-FROM generate_series(1, 30) AS g;
+INSERT INTO venda (data_hora, valor_total, forma_pagamento, cpf_cliente, mat_atendente) VALUES
+('2026-04-01 09:07:00', 34.90, 'PIX', '70000000001', 'F031'),
+('2026-04-02 10:14:00', 25.00, 'DINHEIRO', '70000000002', 'F032'),
+('2026-04-03 11:21:00', 119.70, 'CARTAO_CREDITO', '70000000003', 'F033'),
+('2026-04-04 12:28:00', 115.60, 'CARTAO_DEBITO', '70000000004', 'F034'),
+('2026-04-05 13:35:00', 1149.50, 'BOLETO', '70000000005', 'F035'),
+('2026-04-06 14:42:00', 189.90, 'PIX', '70000000006', 'F036'),
+('2026-04-07 15:49:00', 49.80, 'DINHEIRO', '70000000007', 'F037'),
+('2026-04-08 16:56:00', 188.70, 'CARTAO_CREDITO', '70000000008', 'F038'),
+('2026-04-09 08:03:00', 155.60, 'CARTAO_DEBITO', '70000000009', 'F039'),
+('2026-04-10 09:10:00', 37.50, 'BOLETO', '70000000010', 'F040'),
+('2026-04-11 10:17:00', 44.90, 'PIX', '70000000011', 'F041'),
+('2026-04-12 11:24:00', 65.80, 'DINHEIRO', '70000000012', 'F042'),
+('2026-04-13 12:31:00', 509.70, 'CARTAO_CREDITO', '70000000013', 'F043'),
+('2026-04-14 13:38:00', 75.60, 'CARTAO_DEBITO', '70000000014', 'F044'),
+('2026-04-15 14:45:00', 84.50, 'BOLETO', '70000000015', 'F045'),
+('2026-04-16 15:52:00', 12.90, 'PIX', '70000000016', 'F046'),
+('2026-04-17 16:59:00', 79.80, 'DINHEIRO', '70000000017', 'F047'),
+('2026-04-18 08:06:00', 389.70, 'CARTAO_CREDITO', '70000000018', 'F048'),
+('2026-04-19 09:13:00', 599.60, 'CARTAO_DEBITO', '70000000019', 'F049'),
+('2026-04-20 10:20:00', 124.50, 'BOLETO', '70000000020', 'F050'),
+('2026-04-21 11:27:00', 34.90, 'PIX', '70000000021', 'F051'),
+('2026-04-22 12:34:00', 17.80, 'DINHEIRO', '70000000022', 'F052'),
+('2026-04-23 13:41:00', 269.70, 'CARTAO_CREDITO', '70000000023', 'F053'),
+('2026-04-24 14:48:00', 27.60, 'CARTAO_DEBITO', '70000000024', 'F054'),
+('2026-04-25 15:55:00', 99.50, 'BOLETO', '70000000025', 'F055'),
+('2026-04-26 16:02:00', 14.90, 'PIX', '70000000026', 'F056'),
+('2026-04-27 08:09:00', 438.90, 'DINHEIRO', '70000000027', 'F057'),
+('2026-04-28 09:16:00', 759.60, 'CARTAO_CREDITO', '70000000028', 'F058'),
+('2026-04-29 10:23:00', 849.50, 'CARTAO_DEBITO', '70000000029', 'F059'),
+('2026-04-30 11:30:00', 283.50, 'BOLETO', '70000000030', 'F060');
 
-INSERT INTO contem (numero_venda, cod_produto, quantidade)
-SELECT
-    g,
-    'PROD' || LPAD(g::text, 3, '0'),
-    1 + MOD(g, 6)
-FROM generate_series(1, 30) AS g;
+INSERT INTO contem (numero_venda, cod_produto, quantidade) VALUES
+(1, 'PROD001', 1),
+(2, 'PROD002', 2),
+(3, 'PROD003', 3),
+(4, 'PROD004', 4),
+(5, 'PROD005', 5),
+(6, 'PROD006', 1),
+(7, 'PROD007', 2),
+(8, 'PROD008', 3),
+(9, 'PROD009', 4),
+(10, 'PROD010', 5),
+(11, 'PROD011', 1),
+(12, 'PROD012', 2),
+(13, 'PROD013', 3),
+(14, 'PROD014', 4),
+(15, 'PROD015', 5),
+(16, 'PROD016', 1),
+(17, 'PROD017', 2),
+(18, 'PROD018', 3),
+(19, 'PROD019', 4),
+(20, 'PROD020', 5),
+(21, 'PROD021', 1),
+(22, 'PROD022', 2),
+(23, 'PROD023', 3),
+(24, 'PROD024', 4),
+(25, 'PROD025', 5),
+(26, 'PROD026', 1),
+(27, 'PROD017', 11),
+(28, 'PROD006', 4),
+(29, 'PROD013', 5),
+(30, 'PROD014', 15);
 
-INSERT INTO contem (numero_venda, cod_produto, quantidade)
-SELECT
-    g,
-    'PROD' || LPAD((((g + 7 - 1) % 30) + 1)::text, 3, '0'),
-    2 + MOD(g, 5)
-FROM generate_series(1, 30) AS g;
-
-INSERT INTO entrega (numero_venda, data_saida, data_entrega, status, numero, rua, cep, bairro, cnpj_transportadora)
-SELECT
-    g,
-    CURRENT_DATE - (40 - g),
-    CASE
-        WHEN g <= 20 THEN CURRENT_DATE - (38 - g)
-        ELSE NULL
-    END,
-    CASE
-        WHEN g <= 20 THEN 'ENTREGUE'
-        WHEN g <= 25 THEN 'EM_TRANSITO'
-        ELSE 'PENDENTE'
-    END,
-    (100 + g)::text,
-    'Rua de Entrega ' || g,
-    LPAD((70000000 + g)::text, 8, '0'),
-    'Bairro Entrega ' || LPAD((((g - 1) % 10) + 1)::text, 2, '0'),
-    '8' || LPAD(g::text, 13, '0')
-FROM generate_series(1, 30) AS g;
+INSERT INTO entrega (numero_venda, data_saida, data_entrega, status, numero, rua, cep, bairro, cnpj_transportadora) VALUES
+(1, '2026-04-02', '2026-04-04', 'ENTREGUE', '125', 'Rua da Aurora', '52011010', 'Boa Vista', '92000000000001'),
+(2, '2026-04-03', NULL, 'EM_TRANSITO', '2140', 'Avenida Caxanga', '50720120', 'Madalena', '92000000000002'),
+(3, '2026-04-04', NULL, 'PENDENTE', '88', 'Rua Ribeiro de Brito', '51020000', 'Boa Viagem', '92000000000003'),
+(4, '2026-04-05', NULL, 'ATRASADA', '742', 'Rua Jose Osorio', '50670000', 'Torre', '92000000000004'),
+(5, '2026-04-06', NULL, 'CANCELADA', '301', 'Rua Conselheiro Portela', '52050000', 'Espinheiro', '92000000000005'),
+(6, '2026-04-07', '2026-04-09', 'ENTREGUE', '56', 'Rua do Riachuelo', '50050060', 'Santo Amaro', '92000000000006'),
+(7, '2026-04-08', NULL, 'EM_TRANSITO', '910', 'Rua Benfica', '50741020', 'Madalena', '92000000000007'),
+(8, '2026-04-09', NULL, 'PENDENTE', '3440', 'Avenida Boa Viagem', '51130000', 'Boa Viagem', '92000000000008'),
+(9, '2026-04-10', NULL, 'ATRASADA', '177', 'Rua das Creoulas', '52060010', 'Gracas', '92000000000009'),
+(10, '2026-04-11', NULL, 'CANCELADA', '640', 'Rua Real da Torre', '50751010', 'Torre', '92000000000010'),
+(11, '2026-04-12', '2026-04-14', 'ENTREGUE', '225', 'Rua Padre Roma', '50870000', 'Parnamirim', '92000000000011'),
+(12, '2026-04-13', NULL, 'EM_TRANSITO', '412', 'Rua Amaro Bezerra', '52041000', 'Derby', '92000000000012'),
+(13, '2026-04-14', NULL, 'PENDENTE', '984', 'Avenida Beira Rio', '50610000', 'Ilha do Retiro', '92000000000013'),
+(14, '2026-04-15', NULL, 'ATRASADA', '150', 'Rua dos Navegantes', '51011000', 'Boa Viagem', '92000000000014'),
+(15, '2026-04-16', NULL, 'CANCELADA', '631', 'Rua do Futuro', '52070020', 'Aflitos', '92000000000015'),
+(16, '2026-04-17', '2026-04-19', 'ENTREGUE', '209', 'Rua do Hospicio', '50070030', 'Boa Vista', '92000000000016'),
+(17, '2026-04-18', NULL, 'EM_TRANSITO', '718', 'Rua Jose de Holanda', '50711100', 'Torre', '92000000000017'),
+(18, '2026-04-19', NULL, 'PENDENTE', '65', 'Rua Setubal', '51030110', 'Boa Viagem', '92000000000018'),
+(19, '2026-04-20', NULL, 'ATRASADA', '530', 'Rua Jacobina', '52031120', 'Gracas', '92000000000019'),
+(20, '2026-04-21', NULL, 'CANCELADA', '1290', 'Estrada do Arraial', '50810000', 'Casa Amarela', '92000000000020'),
+(21, '2026-04-22', '2026-04-24', 'ENTREGUE', '141', 'Rua Benfica', '50630000', 'Madalena', '92000000000021'),
+(22, '2026-04-23', NULL, 'EM_TRANSITO', '777', 'Rua Padre Carapuceiro', '51111020', 'Boa Viagem', '92000000000022'),
+(23, '2026-04-24', NULL, 'PENDENTE', '84', 'Rua Gervasio Pires', '52020020', 'Santo Amaro', '92000000000023'),
+(24, '2026-04-25', NULL, 'ATRASADA', '604', 'Rua Visconde de Albuquerque', '50730040', 'Madalena', '92000000000024'),
+(25, '2026-04-26', NULL, 'CANCELADA', '238', 'Rua dos Navegantes', '51021120', 'Boa Viagem', '92000000000025'),
+(26, '2026-04-27', '2026-04-29', 'ENTREGUE', '19', 'Rua da Hora', '52061030', 'Espinheiro', '92000000000026'),
+(27, '2026-04-28', NULL, 'EM_TRANSITO', '1099', 'Rua Imperial', '50090000', 'Sao Jose', '92000000000027'),
+(28, '2026-04-29', NULL, 'PENDENTE', '301', 'Rua Joao Ivo da Silva', '50680130', 'Torre', '92000000000028'),
+(29, '2026-04-30', NULL, 'ATRASADA', '2020', 'Avenida Conselheiro Aguiar', '51170000', 'Boa Viagem', '92000000000029'),
+(30, '2026-05-01', NULL, 'CANCELADA', '515', 'Rua Desembargador Goes Cavalcanti', '52080040', 'Parnamirim', '92000000000030');
 
 COMMIT;
