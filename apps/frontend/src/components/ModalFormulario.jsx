@@ -31,7 +31,8 @@ export function ModalFormulario({ aberto, titulo, descricao, aoFechar, children 
       document.body.style.overflow = overflowAnterior;
       window.removeEventListener('keydown', tratarTecla);
     };
-  }, [aberto, aoFechar]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [aberto]);
 
   if (!aberto) {
     return null;

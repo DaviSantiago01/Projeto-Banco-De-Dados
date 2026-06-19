@@ -170,7 +170,7 @@ public class RelatorioDao {
             Connection connection = fabricaConexao.abrirConexao();
             PreparedStatement statement = connection.prepareStatement(sql)
         ) {
-            statement.setString(1, normalizarBuscaPorTrecho(nome));
+            statement.setString(1, normalizarBuscaPorTrecho(nome)); 
 
             try (ResultSet resultSet = statement.executeQuery()) {
                 while (resultSet.next()) {

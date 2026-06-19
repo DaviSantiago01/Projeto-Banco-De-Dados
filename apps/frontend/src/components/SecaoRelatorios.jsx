@@ -63,7 +63,7 @@ export function SecaoRelatorios({
           linhas={viewVendasDetalhadas}
           carregando={carregandoRelatorios}
           compacta
-          maxLinhas={5}
+          maxLinhas={20}
           larguraMinima={1180}
         />
       </div>
